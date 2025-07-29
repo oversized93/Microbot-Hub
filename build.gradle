@@ -6,8 +6,6 @@ plugins {
 
 import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
 
-apply from: "gradle/tasks/plugin-creation.gradle"
-
 version = '1.0'
 
 tasks.named('shadowJar') {
@@ -29,15 +27,14 @@ configurations {
 
 repositories {
     maven {
-        url = 'http://138.201.81.246:8081/repository/microbot-release/'
-        allowInsecureProtocol = true
+        url = 'https://nexus.microbot.cloud/repository/microbot-nightly/'
     }
     mavenCentral()
 }
 
 dependencies {
-    implementation 'net.runelite:microbot:1.9.6:shaded'
-    microbotRuntime 'net.runelite:microbot:1.9.6:shaded'
+    compileOnly 'com.microbot:client:1.9.6.1'
+    microbotRuntime 'com.microbot:client:1.9.6.1'
     implementation 'com.google.guava:guava:33.2.0-jre'
 }
 
@@ -46,28 +43,21 @@ application {
     mainClass = 'net.runelite.client.RuneLite'
 }
 
-// Run Microbot
-tasks.register('runMicrobot', Exec) {
-    dependsOn tasks.named('copyToMicrobot')
-    commandLine 'java', '-jar', configurations.microbotRuntime.singleFile, ' -plugin=abc'
-}
-
-
-// ---- auto-detect plugins (src/main/java/plugins/<name>) ----
-def pluginsDir = file('src/main/java/plugins')
+def pluginsDir = file('src/main/java/com/microbot/plugins')
 def pluginDirs = pluginsDir.listFiles()?.findAll { it.isDirectory() } ?: []
 
 println "Detected plugins: " + pluginDirs*.name
 
-def selectedPlugin = project.findProperty("plugin") // null if not passed
+def pluginsProperty = project.findProperty("pluginList")
+def selectedPlugins = pluginsProperty ? pluginsProperty.split(',').collect { it.trim() } : []
 
 // Create a sourceSet + ShadowJar per plugin
 pluginDirs.each { dir ->
     def pluginName = dir.name
 
-    if (selectedPlugin && selectedPlugin != pluginName) {
-        println "Skipping plugin: ${pluginName} (selected: ${selectedPlugin})"
-        return // Skip if not matching parameter
+    if (selectedPlugins && !selectedPlugins.contains(pluginName)) {
+        println "Skipping plugin: $pluginName"
+        return
     }
 
     // Create a sourceset for each plugin
@@ -87,6 +77,10 @@ pluginDirs.each { dir ->
         destinationDirectory.set(layout.buildDirectory.dir("libs"))
 
         duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+        // Exclude module-info.class entirely (you don't need modules for plugins)
+        exclude 'module-info.class'
+        exclude 'META-INF/versions/**'
+        outputs.upToDateWhen { false } // Always run
     }
 
     def copyTask = tasks.register("copy${pluginName}ToMicrobot", Copy) {
@@ -94,11 +88,26 @@ pluginDirs.each { dir ->
         from(jarTask.flatMap { it.archiveFile })   // never hardcode build/libs/...
         into("${System.properties['user.home']}/.runelite/microbot-plugins")
         rename { "${pluginName}.jar" }             // optional
+        outputs.upToDateWhen { false } // Always run
     }
+
+    tasks.register('runMicrobot', Exec) {
+        dependsOn(copyTask)
+
+        if (pluginsProperty) {
+            println 'Running  ' + configurations.microbotRuntime.singleFile
+            commandLine 'java', '-jar', configurations.microbotRuntime.singleFile, "--plugins=${pluginsProperty}"
+        } else {
+            println 'Running  ' + configurations.microbotRuntime.singleFile
+            commandLine 'java', '-jar', configurations.microbotRuntime.singleFile
+        }
+    }
+
 
     // Only make build depend on it if you want it to always run
     tasks.named("build") {
         dependsOn(jarTask)                         // always build the jar
         dependsOn(copyTask)
+        dependsOn(runMicrobot)
     }
 }

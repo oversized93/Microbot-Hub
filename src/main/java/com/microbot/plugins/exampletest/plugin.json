@@ -1,0 +1,8 @@
+{
+  "id": "ExampleTest",
+  "author":"M",
+  "name": "M. ExampleTest",
+  "version": "1.0.0",
+  "mainClass": "com.microbot.plugins.exampletest",
+  "minClientVersion": "1.9.6"
+}
