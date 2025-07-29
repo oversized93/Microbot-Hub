@@ -1,0 +1,8 @@
+{
+  "id": "Woodcutting",
+  "author":"Mocrosoft",
+  "name": "M. Woodcutting",
+  "version": "1.0.0",
+  "mainClass": "com.microbot.plugins.WoodcuttingPlugin",
+  "minClientVersion": "1.9.6"
+}

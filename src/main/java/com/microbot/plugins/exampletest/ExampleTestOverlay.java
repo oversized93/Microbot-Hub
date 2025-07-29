@@ -1,5 +1,3 @@
-package microbot.plugins.exampletest;
-
 import net.runelite.client.plugins.microbot.Microbot;
 import net.runelite.client.ui.FontManager;
 import net.runelite.client.ui.overlay.OverlayPanel;
@@ -11,10 +9,10 @@ import net.runelite.client.ui.overlay.components.TitleComponent;
 import javax.inject.Inject;
 import java.awt.*;
 
-public class ExampleOverlayTest extends OverlayPanel {
+public class ExampleTestOverlay extends OverlayPanel {
     public final ButtonComponent myButton;
     @Inject
-    ExampleOverlayTest(ExamplePluginTest plugin)
+    ExampleTestOverlay(ExampleTestPlugin plugin)
     {
         super(plugin);
         setPosition(OverlayPosition.TOP_LEFT);

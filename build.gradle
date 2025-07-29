@@ -91,14 +91,12 @@ pluginDirs.each { dir ->
         outputs.upToDateWhen { false } // Always run
     }
 
-    tasks.register('runMicrobot', Exec) {
+    tasks.register("${pluginName}runMicrobot", Exec) {
         dependsOn(copyTask)
 
         if (pluginsProperty) {
-            println 'Running  ' + configurations.microbotRuntime.singleFile
             commandLine 'java', '-jar', configurations.microbotRuntime.singleFile, "--plugins=${pluginsProperty}"
         } else {
-            println 'Running  ' + configurations.microbotRuntime.singleFile
             commandLine 'java', '-jar', configurations.microbotRuntime.singleFile
         }
     }
@@ -108,6 +106,6 @@ pluginDirs.each { dir ->
     tasks.named("build") {
         dependsOn(jarTask)                         // always build the jar
         dependsOn(copyTask)
-        dependsOn(runMicrobot)
+        dependsOn("${pluginName}runMicrobot")
     }
 }

@@ -1,4 +1,3 @@
-package microbot.plugins.exampletest;
 
 import com.google.inject.Provides;
 import lombok.extern.slf4j.Slf4j;
@@ -19,21 +18,21 @@ import java.awt.*;
         enabledByDefault = false
 )
 @Slf4j
-public class ExamplePluginTest extends Plugin {
+public class WoodcuttingPlugin extends Plugin {
     @Inject
-    private ExampleConfigTest config;
+    private WoodcuttingConfig config;
     @Provides
-    ExampleConfigTest provideConfig(ConfigManager configManager) {
-        return configManager.getConfig(ExampleConfigTest.class);
+    WoodcuttingConfig provideConfig(ConfigManager configManager) {
+        return configManager.getConfig(WoodcuttingConfig.class);
     }
 
     @Inject
     private OverlayManager overlayManager;
     @Inject
-    private ExampleOverlayTest exampleOverlay;
+    private WoodcuttingOverlay exampleOverlay;
 
     @Inject
-    ExampleScriptTest exampleScript;
+    WoodcuttingScript exampleScript;
 
 
     @Override
