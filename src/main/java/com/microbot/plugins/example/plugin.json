@@ -1,0 +1,9 @@
+{
+  "id": "example",
+  "name": "Example",
+  "version": "1.0.0",
+  "author": "Your Name",
+  "description": "Example description for Example",
+  "main": "com.microbot.microbot.Example",
+  "minClientVersion": "1.9.6"
+}

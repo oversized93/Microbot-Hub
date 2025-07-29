@@ -1,0 +1,113 @@
+import java.nio.file.Files
+
+def toPascalCase(String input) {
+    input.split(/[^a-zA-Z0-9]/)*.capitalize().join('')
+}
+
+ext.pluginName = project.hasProperty("pluginName") ? toPascalCase(project.getProperty("pluginName")) : null
+
+
+task createPlugin {
+    group = "plugin-hub"
+    description = "Generates a new plugin folder with basic files."
+
+    doLast {
+        if (!pluginName) {
+            throw new GradleException("Please specify a plugin name: gradle createPlugin -PpluginName=MyPlugin")
+        }
+
+        def pluginDir = file("src/main/java/com/microbot/plugins/${pluginName.toLowerCase()}")
+        if (!pluginDir.exists()) {
+            pluginDir.mkdirs()
+        }
+
+        file("${pluginDir}/plugin.json").text = """{
+  "id": "${pluginName.toLowerCase()}",
+  "name": "${pluginName}",
+  "version": "1.0.0",
+  "author": "Your Name",
+  "description": "Example description for ${pluginName}",
+  "main": "com.microbot.microbot.${pluginName}",
+  "minClientVersion": "1.9.6"
+}
+"""
+
+        file("${pluginDir}/${pluginName}Config.java").text = """package com.microbot.plugins.${pluginName.toLowerCase()};
+
+import net.runelite.client.config.Config;
+import net.runelite.client.config.ConfigGroup;
+import net.runelite.client.config.ConfigItem;
+
+@ConfigGroup("${pluginName}}")
+public interface ${pluginName}Config extends Config
+{
+    @ConfigItem(
+            keyName = "greeting",
+            name = "Welcome Greeting",
+            description = "The message to show to the user when they login"
+    )
+    default String greeting()
+    {
+        return "Hello";
+    }
+}
+"""
+
+        file("${pluginDir}/${pluginName}Plugin.java").text = """package com.microbot.plugins.${pluginName.toLowerCase()};
+
+import com.google.inject.Provides;
+import javax.inject.Inject;
+import lombok.extern.slf4j.Slf4j;
+import net.runelite.api.ChatMessageType;
+import net.runelite.api.Client;
+import net.runelite.api.GameState;
+import net.runelite.api.events.GameStateChanged;
+import net.runelite.client.config.ConfigManager;
+import net.runelite.client.eventbus.Subscribe;
+import net.runelite.client.plugins.Plugin;
+import net.runelite.client.plugins.PluginDescriptor;
+
+@Slf4j
+@PluginDescriptor(
+        name = "${pluginName}"
+)
+public class ${pluginName}Plugin extends Plugin
+{
+    @Inject
+    private Client client;
+
+    @Inject
+    private ${pluginName}Config config;
+
+    @Override
+    protected void startUp() throws Exception
+    {
+        log.info("${pluginName} started!");
+    }
+
+    @Override
+    protected void shutDown() throws Exception
+    {
+        log.info("${pluginName} stopped!");
+    }
+
+    @Subscribe
+    public void onGameStateChanged(GameStateChanged gameStateChanged)
+    {
+        if (gameStateChanged.getGameState() == GameState.LOGGED_IN)
+        {
+            client.addChatMessage(ChatMessageType.GAMEMESSAGE, "", "${pluginName} says " + config.greeting(), null);
+        }
+    }
+
+    @Provides
+    ${pluginName}Config provideConfig(ConfigManager configManager)
+    {
+        return configManager.getConfig(${pluginName}Config.class);
+    }
+}
+"""
+
+        println "Plugin '${pluginName}' created in src/main/java/com/microbot/${pluginName}/"
+    }
+}
