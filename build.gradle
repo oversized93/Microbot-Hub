@@ -54,6 +54,9 @@ def static pluginVersionFromPluginJson(File pluginDir) {
     return json.version ?: "0.0.1"
 }
 
+
+// Plugin Logic
+
 def pluginsDir = file('src/main/java/com/microbot/plugins')
 def pluginDirs = pluginsDir.listFiles()?.findAll { it.isDirectory() } ?: []
 
