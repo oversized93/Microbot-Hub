@@ -33,3 +33,14 @@ jobs:
 
       - name: Publish to Nexus
         run: ./gradlew publish
+
+      - name: Copy plugins.json to public folder
+        run: |
+          mkdir -p public
+          cp build/generated/resources/plugins.json public/
+
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./public
