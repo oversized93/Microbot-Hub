@@ -2,9 +2,14 @@ plugins {
     id 'application'
     id 'io.freefair.lombok' version '8.6'
     id 'com.github.johnrengelman.shadow' version '8.1.1'
+    id 'maven-publish'
+
 }
 
 import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
+import groovy.json.JsonSlurper
+
+apply from: 'generate-plugins.gradle'
 
 version = '1.0'
 
@@ -35,12 +40,18 @@ repositories {
 dependencies {
     compileOnly 'com.microbot:client:1.9.6.1'
     microbotRuntime 'com.microbot:client:1.9.6.1'
-    implementation 'com.google.guava:guava:33.2.0-jre'
 }
 
 application {
     // Replace this with the actual main class inside your shaded jar
     mainClass = 'net.runelite.client.RuneLite'
+}
+
+def static pluginVersionFromPluginJson(File pluginDir) {
+    def pluginJson = new File(pluginDir, "plugin.json")
+    if (!pluginJson.exists()) return "0.0.1"
+    def json = new JsonSlurper().parseText(pluginJson.text)
+    return json.version ?: "0.0.1"
 }
 
 def pluginsDir = file('src/main/java/com/microbot/plugins')
@@ -49,7 +60,7 @@ def pluginDirs = pluginsDir.listFiles()?.findAll { it.isDirectory() } ?: []
 println "Detected plugins: " + pluginDirs*.name
 
 def pluginsProperty = project.findProperty("pluginList")
-def selectedPlugins = pluginsProperty ? pluginsProperty.split(',').collect { it.trim() } : []
+def selectedPlugins = pluginsProperty ? pluginsProperty.split(',' as Closure).collect { it.trim() } : []
 
 // Create a sourceSet + ShadowJar per plugin
 pluginDirs.each { dir ->
@@ -58,6 +69,20 @@ pluginDirs.each { dir ->
     if (selectedPlugins && !selectedPlugins.contains(pluginName)) {
         println "Skipping plugin: $pluginName"
         return
+    }
+
+    // Create a dependencySet for each plugin
+    def pluginConfigName = "${pluginName}Implementation"
+    configurations.create(pluginConfigName) {
+        extendsFrom configurations.pluginShadowClasspath
+    }
+
+    def depsFile = new File(dir as File, "dependencies.txt")
+    if (depsFile.exists()) {
+        depsFile.readLines().each { dep ->
+            println("dep " + dep.trim())
+            dependencies.add(pluginConfigName, dep.trim())
+        }
     }
 
     // Create a sourceset for each plugin
@@ -73,13 +98,17 @@ pluginDirs.each { dir ->
         archiveVersion.set('')          // => pluginName.jar
         archiveClassifier.set('')       // no -all
         from ss.output
-        configurations = [project.configurations.pluginShadowClasspath]
+        // configurations = [project.configurations.pluginShadowClasspath]
+        //noinspection ConfigurationAvoidance
+        configurations = [project.configurations.getByName(pluginConfigName)]
         destinationDirectory.set(layout.buildDirectory.dir("libs"))
 
         duplicatesStrategy = DuplicatesStrategy.EXCLUDE
         // Exclude module-info.class entirely (you don't need modules for plugins)
         exclude 'module-info.class'
         exclude 'META-INF/versions/**'
+        exclude '**/plugin.json'
+        exclude '**/plugins.json'
         outputs.upToDateWhen { false } // Always run
     }
 
@@ -91,21 +120,54 @@ pluginDirs.each { dir ->
         outputs.upToDateWhen { false } // Always run
     }
 
-    tasks.register("${pluginName}runMicrobot", Exec) {
-        dependsOn(copyTask)
-
-        if (pluginsProperty) {
-            commandLine 'java', '-jar', configurations.microbotRuntime.singleFile, "--plugins=${pluginsProperty}"
-        } else {
-            commandLine 'java', '-jar', configurations.microbotRuntime.singleFile
+    jarTask.configure {
+        dependsOn("generatePluginsJson")
+        from("$buildDir/generated/resources/plugins.json") {
+            into("/")
+            rename { "plugins.json" }
         }
     }
 
+    afterEvaluate {
+        publishing {
+            publications {
+                create("${pluginName}Publication", MavenPublication) {
+                    groupId = "com.microbot.plugins"
+                    artifactId = pluginName.toLowerCase()
+                    version = pluginVersionFromPluginJson(dir as File)
+
+                    artifact(tasks.named("${pluginName}Jar").get().archiveFile) {
+                        extension "jar"
+                    }
+                }
+            }
+
+            repositories {
+                maven {
+                    name = "microbot-plugins"
+                    url = uri("https://nexus.microbot.cloud/repository/microbot-plugins/")
+                    credentials {
+                        println "Nexus username: ${project.findProperty("nexusUsername")}"
+                        username = project.findProperty("nexusUsername") ?: ""
+                        password = project.findProperty("nexusPassword") ?: ""
+                    }
+                }
+            }
+        }
+    }
 
     // Only make build depend on it if you want it to always run
     tasks.named("build") {
         dependsOn(jarTask)                         // always build the jar
         dependsOn(copyTask)
-        dependsOn("${pluginName}runMicrobot")
+        dependsOn("runMicrobot")
+    }
+}
+
+tasks.register("runMicrobot", Exec) {
+    if (pluginsProperty) {
+        commandLine 'java', '-jar', configurations.microbotRuntime.singleFile, "--plugins=${pluginsProperty}"
+    } else {
+        commandLine 'java', '-jar', configurations.microbotRuntime.singleFile
     }
 }
