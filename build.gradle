@@ -77,7 +77,7 @@ pluginDirs.each { dir ->
     }
 
     // Create a dependencySet for each plugin
-    def pluginConfigName = "${pluginName}Implementation"
+    def pluginConfigName = "${pluginName}ShadowDeps"
     configurations.create(pluginConfigName) {
         extendsFrom configurations.pluginShadowClasspath
     }
@@ -152,7 +152,6 @@ pluginDirs.each { dir ->
                     name = "microbot-plugins"
                     url = uri("https://nexus.microbot.cloud/repository/microbot-plugins/")
                     credentials {
-                        println "Nexus username: ${project.findProperty("nexusUsername")}"
                         username = project.findProperty("nexusUsername") ?: ""
                         password = project.findProperty("nexusPassword") ?: ""
                     }
