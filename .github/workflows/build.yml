@@ -1,1 +1,35 @@
 
+name: Build and Publish Plugins
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  build-and-publish:
+    runs-on: ubuntu-latest
+
+    env:
+      CI: true  # tells Gradle not to run runMicrobot
+      ORG_GRADLE_PROJECT_nexusUsername: ${{ secrets.NEXUS_USERNAME }}
+      ORG_GRADLE_PROJECT_nexusPassword: ${{ secrets.NEXUS_PASSWORD }}
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up JDK
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'temurin'
+          java-version: '17' # or 11 depending on your project
+
+      - name: Grant execute permissions to gradlew
+        run: chmod +x gradlew
+
+      - name: Build plugins
+        run: ./gradlew clean build
+
+      - name: Publish to Nexus
+        run: ./gradlew publish

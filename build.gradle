@@ -6,6 +6,8 @@ plugins {
 
 }
 
+def isCI = System.getenv("CI")?.toBoolean() ?: false
+
 import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
 import groovy.json.JsonSlurper
 
@@ -163,7 +165,9 @@ pluginDirs.each { dir ->
     tasks.named("build") {
         dependsOn(jarTask)
         dependsOn(copyTask)
-        dependsOn("runMicrobot")
+        if (!isCI) {
+            dependsOn("runMicrobot")
+        }
     }
 }
 
