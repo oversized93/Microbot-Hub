@@ -158,7 +158,7 @@ pluginDirs.each { dir ->
 
     // Only make build depend on it if you want it to always run
     tasks.named("build") {
-        dependsOn(jarTask)                         // always build the jar
+        dependsOn(jarTask)
         dependsOn(copyTask)
         dependsOn("runMicrobot")
     }
