@@ -53,7 +53,7 @@ tasks.register("generatePluginsJson") {
                 pluginName = pluginJavaFile.name
                 println "Found plugin class: ${pluginJavaFile.name}"
             } else {
-                println "No Plugin.java file found in $pluginName"
+                println "️⚠️ No Plugin.java file found in $pluginName"
             }
 
             def pluginJsonFile = new File(pluginDir, "plugin.json")
