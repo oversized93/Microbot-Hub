@@ -206,6 +206,18 @@ tasks.register("copyPluginDocs") {
 
         pluginDirs.each { pluginDir ->
             def pluginName = pluginDir.name
+
+            def pluginJavaFile = pluginDir.listFiles()?.find { file ->
+                file.name.endsWith("Plugin.java")
+            }
+
+            if (pluginJavaFile) {
+                pluginName = pluginJavaFile.name[0..-6] // removes '.java'
+                println "Found plugin class: ${pluginJavaFile.name}"
+            } else {
+                println "⚠️ No Plugin.java file found in $pluginName"
+            }
+
             def readmeFile = pluginDir.listFiles()?.find { file ->
                 file.name.equalsIgnoreCase("readme.md")
             }
