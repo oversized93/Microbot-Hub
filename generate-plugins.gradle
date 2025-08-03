@@ -11,15 +11,21 @@ def jarOutputDir = file("$buildDir/libs")
 def outputJson = file("$buildDir/generated/resources/plugins.json")
 
 def computeSHA256 = { File file ->
-    MessageDigest md = MessageDigest.getInstance("SHA-256")
-    file.withInputStream { fis ->
-        byte[] buffer = new byte[8192]
-        int read
-        while ((read = fis.read(buffer)) != -1) {
-            md.update(buffer, 0, read)
+    MessageDigest digest = MessageDigest.getInstance("SHA-256");
+    byte[] hash = digest.digest(file.bytes);
+
+    StringBuilder hexString = new StringBuilder();
+    for (byte b : hash)
+    {
+        String hex = Integer.toHexString(0xff & b);
+        if (hex.length() == 1)
+        {
+            hexString.append('0');
         }
+        hexString.append(hex);
     }
-    return md.digest().encodeHex().toString()
+
+    return hexString.toString();
 }
 
 def static pluginVersionFromPluginJson(File pluginDir) {
