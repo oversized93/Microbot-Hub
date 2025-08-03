@@ -67,7 +67,18 @@ def selectedPlugins = pluginsProperty ? pluginsProperty.split(',' as Closure).co
 
 // Create a sourceSet + ShadowJar per plugin
 pluginDirs.each { pluginDir ->
-    def pluginName = pluginDir.name
+    def pluginName = ""
+
+    def pluginJavaFile = pluginDir.listFiles()?.find { file ->
+        file.name.endsWith("Plugin.java")
+    }
+
+    if (pluginJavaFile) {
+        pluginName = pluginJavaFile.name
+        println "Found plugin class: ${pluginJavaFile.name}"
+    } else {
+        println "No Plugin.java file found in $pluginName"
+    }
 
     if (selectedPlugins && !selectedPlugins.contains(pluginName)) {
         println "Skipping plugin: $pluginName"
