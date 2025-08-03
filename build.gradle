@@ -205,7 +205,7 @@ tasks.register("copyPluginDocs") {
         publicDir.mkdirs()
 
         pluginDirs.each { pluginDir ->
-            def pluginName = pluginDir.name
+            def pluginName = ""
 
             def pluginJavaFile = pluginDir.listFiles()?.find { file ->
                 file.name.endsWith("Plugin.java")
