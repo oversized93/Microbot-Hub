@@ -207,7 +207,7 @@ tasks.register("copyPluginDocs") {
         pluginDirs.each { pluginDir ->
             def pluginName = pluginDir.name
             def readmeFile = pluginDir.listFiles()?.find { file ->
-                file.name.equalsIgnoreCase("readme.md")
+                file.name.equalsIgnoreCase("index.md")
             }
             def imagesDir = new File(pluginDir, "images")
 
