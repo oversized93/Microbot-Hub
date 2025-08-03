@@ -1,0 +1,8 @@
+{
+  "id": "ExampleTestPlugin",
+  "description": "This is a test",
+  "author":"Mocrosoft",
+  "name": "M. ExampleTest",
+  "version": "1.0.0",
+  "minClientVersion": "1.9.6"
+}

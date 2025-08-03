@@ -1,0 +1,104 @@
+// generate-plugins.gradle
+
+import groovy.json.JsonSlurper
+import groovy.json.JsonOutput
+import java.security.MessageDigest
+
+
+def pluginRoot = file("src/main/java/com/microbot/plugins")
+def jarOutputDir = file("$buildDir/libs")
+def outputJson = file("$buildDir/generated/resources/plugins.json")
+
+def computeSHA256 = { File file ->
+    MessageDigest digest = MessageDigest.getInstance("SHA-256");
+    byte[] hash = digest.digest(file.bytes);
+
+    StringBuilder hexString = new StringBuilder();
+    for (byte b : hash)
+    {
+        String hex = Integer.toHexString(0xff & b);
+        if (hex.length() == 1)
+        {
+            hexString.append('0');
+        }
+        hexString.append(hex);
+    }
+
+    return hexString.toString();
+}
+
+def static pluginVersionFromPluginJson(File pluginDir) {
+    def pluginJson = new File(pluginDir, "plugin.json")
+    if (!pluginJson.exists()) return "0.0.1"
+    def json = new JsonSlurper().parseText(pluginJson.text)
+    return json.version ?: "0.0.1"
+}
+
+tasks.register("generatePluginsJson") {
+    group = "build"
+    description = "Generates plugins.json by scanning plugin folders and hashing JARs"
+
+    doLast {
+        def plugins = []
+
+        pluginRoot.eachDir { pluginDir ->
+            def pluginName = ""
+
+            def pluginJavaFile = pluginDir.listFiles()?.find { file ->
+                file.name.endsWith("Plugin.java")
+            }
+
+            if (pluginJavaFile) {
+                pluginName = pluginJavaFile.name[0..-6] // removes '.java'
+                println "Found plugin class: ${pluginJavaFile.name}"
+            } else {
+                println "⚠️ No Plugin.java file found in $pluginName"
+            }
+
+
+            def pluginJsonFile = new File(pluginDir, "plugin.json")
+            def version = pluginVersionFromPluginJson(pluginDir as File)
+            def jarFile = new File(jarOutputDir, "${pluginName}-${version}.jar")
+
+            if (!pluginJsonFile.exists()) {
+                logger.warn("⚠️ No plugin.json found in ${pluginName}")
+                return
+            }
+
+            if (!jarFile.exists()) {
+                logger.warn("⚠️ No built JAR found for ${pluginName}, expected at: ${jarFile}")
+                return
+            }
+
+            try {
+                def parsed = new JsonSlurper().parseText(pluginJsonFile.text)
+
+                // Add SHA256
+                parsed["sha256"] = computeSHA256(jarFile)
+
+                // Add Nexus URL
+                def pluginVersion = parsed.version
+                def pluginId = parsed.id ?: pluginName  // fallback to folder name
+                def nexusBase = "https://nexus.microbot.cloud/repository/microbot-plugins"
+                parsed["url"] = "${nexusBase}/com/microbot/plugins/${pluginId.toLowerCase()}/${pluginVersion}/${pluginId.toLowerCase()}-${pluginVersion}.jar"
+
+                plugins << parsed
+            } catch (e) {
+                logger.warn("⚠️ Error reading ${pluginName}: ${e.message}")
+            }
+        }
+
+        outputJson.parentFile.mkdirs()
+        outputJson.text = JsonOutput.prettyPrint(JsonOutput.toJson(plugins))
+        println "✅ Generated plugins.json with ${plugins.size()} plugins"
+    }
+}
+
+// Exclude raw plugin.json files
+sourceSets.main.resources {
+    exclude '**/plugin.json'
+}
+
+tasks.named("processResources") {
+    dependsOn("generatePluginsJson")
+}
