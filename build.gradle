@@ -112,6 +112,11 @@ pluginDirs.each { dir ->
         preserveFileTimestamps = false
         reproducibleFileOrder = true
 
+        // Set Unix permissions consistently
+        eachFile { fileCopyDetails ->
+            fileCopyDetails.mode = 0644 // rw-r--r--
+        }
+
         duplicatesStrategy = DuplicatesStrategy.EXCLUDE
         // Exclude module-info.class entirely (you don't need modules for plugins)
         exclude 'module-info.class'
