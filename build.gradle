@@ -125,7 +125,6 @@ pluginDirs.each { dir ->
         dependsOn(jarTask)
         from(jarTask.flatMap { it.archiveFile })   // never hardcode build/libs/...
         into("${System.properties['user.home']}/.runelite/microbot-plugins")
-        rename { "${pluginName}.jar" }             // optional
         outputs.upToDateWhen { false } // Always run
     }
 
@@ -167,8 +166,8 @@ pluginDirs.each { dir ->
     // Only make build depend on it if you want it to always run
     tasks.named("build") {
         dependsOn(jarTask)
-        dependsOn(copyTask)
         if (!isCI) {
+            dependsOn(copyTask)
             dependsOn("runMicrobot")
         }
     }
