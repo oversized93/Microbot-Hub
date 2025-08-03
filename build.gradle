@@ -100,7 +100,7 @@ pluginDirs.each { dir ->
     // Create a ShadowJar task for each plugin
     def jarTask = tasks.register("${pluginName}Jar", ShadowJar) {
         archiveBaseName.set(pluginName)
-        archiveVersion.set('')          // => pluginName.jar
+        archiveVersion.set(pluginVersionFromPluginJson(dir as File))          // => pluginName.jar
         archiveClassifier.set('')       // no -all
         from ss.output
         // configurations = [project.configurations.pluginShadowClasspath]
