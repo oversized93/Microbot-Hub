@@ -6,7 +6,7 @@
         "name": "M. ExampleTest",
         "version": "1.0.0",
         "minClientVersion": "1.9.6",
-        "sha256": "e64b462a91863dd89e73b903c968fa50927dd357fc72678e21661680dcb4f3bc",
+        "sha256": "952f284347bca3f86d41360a94977023da36fbecb53f19c21a29cc5933334040",
         "url": "https://nexus.microbot.cloud/repository/microbot-plugins/com/microbot/plugins/exampletest/1.0.0/exampletest-1.0.0.jar"
     },
     {
@@ -16,7 +16,7 @@
         "name": "M. Woodcutting",
         "version": "1.0.0",
         "minClientVersion": "1.9.6",
-        "sha256": "03672e3eff288ca8dfe287358a76c18f981ccc82025a410004ac14252fec47b0",
+        "sha256": "1bd9100c3639e15bb8d7eebc465edd09dd3ad588b19391fb9596671013b6964f",
         "url": "https://nexus.microbot.cloud/repository/microbot-plugins/com/microbot/plugins/woodcutting/1.0.0/woodcutting-1.0.0.jar"
     }
 ]
