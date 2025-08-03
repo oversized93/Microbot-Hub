@@ -50,11 +50,12 @@ tasks.register("generatePluginsJson") {
             }
 
             if (pluginJavaFile) {
-                pluginName = pluginJavaFile.name
+                pluginName = pluginJavaFile.name[0..-6] // removes '.java'
                 println "Found plugin class: ${pluginJavaFile.name}"
             } else {
-                println "️⚠️ No Plugin.java file found in $pluginName"
+                println "⚠️ No Plugin.java file found in $pluginName"
             }
+
 
             def pluginJsonFile = new File(pluginDir, "plugin.json")
             def version = pluginVersionFromPluginJson(pluginDir as File)
