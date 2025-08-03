@@ -108,6 +108,10 @@ pluginDirs.each { dir ->
         configurations = [project.configurations.getByName(pluginConfigName)]
         destinationDirectory.set(layout.buildDirectory.dir("libs"))
 
+        //Disable timestamp preservation
+        preserveFileTimestamps = false
+        reproducibleFileOrder = true
+
         duplicatesStrategy = DuplicatesStrategy.EXCLUDE
         // Exclude module-info.class entirely (you don't need modules for plugins)
         exclude 'module-info.class'
