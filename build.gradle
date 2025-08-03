@@ -106,12 +106,14 @@ pluginDirs.each { pluginDir ->
         runtimeClasspath += sourceSets.main.runtimeClasspath
     }
 
+
     // Create a ShadowJar task for each plugin
     def jarTask = tasks.register("${pluginName}Jar", ShadowJar) {
+        from ss.output
+        archiveFileName.set("${pluginName}-${pluginVersionFromPluginJson(pluginDir)}.jar")
         archiveBaseName.set(pluginName)
         archiveVersion.set(pluginVersionFromPluginJson(pluginDir as File))          // => pluginName.jar
         archiveClassifier.set('')       // no -all
-        from ss.output
         // configurations = [project.configurations.pluginShadowClasspath]
         //noinspection ConfigurationAvoidance
         configurations = [project.configurations.getByName(pluginConfigName)]
@@ -123,21 +125,29 @@ pluginDirs.each { pluginDir ->
         exclude 'META-INF/versions/**'
         exclude '**/plugin.json'
         exclude '**/plugins.json'
-        outputs.upToDateWhen { isCI }
+        outputs.upToDateWhen { false }
+
+        dependsOn("generatePluginsJson")
+
     }
 
     def copyTask = tasks.register("copy${pluginName}ToMicrobot", Copy) {
         dependsOn(jarTask)
         from(jarTask.flatMap { it.archiveFile })   // never hardcode build/libs/...
         into("${System.properties['user.home']}/.runelite/microbot-plugins")
-        outputs.upToDateWhen { isCI } // Always run
+        outputs.upToDateWhen { false } // Always run
     }
+
+
 
     jarTask.configure {
         dependsOn("generatePluginsJson")
         from("$buildDir/generated/resources/plugins.json") {
             into("/")
             rename { "plugins.json" }
+        }
+        doLast {
+            println "✅ Built plugin JAR: ${archiveFile.get().asFile}"
         }
     }
 
@@ -173,9 +183,10 @@ pluginDirs.each { pluginDir ->
         dependsOn(jarTask)
         if (!isCI) {
             dependsOn(copyTask)
-            dependsOn("runMicrobot")
         }
     }
+
+
 }
 
 tasks.withType(Jar).configureEach {
@@ -185,14 +196,6 @@ tasks.withType(Jar).configureEach {
     // Set Unix permissions consistently
     eachFile { fileCopyDetails ->
         fileCopyDetails.mode = 0644 // rw-r--r--
-    }
-}
-
-tasks.register("runMicrobot", Exec) {
-    if (pluginsProperty) {
-        commandLine 'java', '-jar', configurations.microbotRuntime.singleFile, "--plugins=${pluginsProperty}"
-    } else {
-        commandLine 'java', '-jar', configurations.microbotRuntime.singleFile
     }
 }
 
@@ -253,5 +256,20 @@ tasks.register("copyPluginDocs") {
 tasks.named("generatePluginsJson") {
     if (!isCI) {
         finalizedBy("copyPluginDocs")
+    }
+}
+
+tasks.register("runMicrobot", Exec) {
+    if (pluginsProperty) {
+        commandLine 'java', '-jar', configurations.microbotRuntime.singleFile, "--plugins=${pluginsProperty}"
+    } else {
+        commandLine 'java', '-jar', configurations.microbotRuntime.singleFile
+    }
+}
+
+tasks.named("build") {
+    finalizedBy("copyPluginDocs")
+    if (!isCI) {
+        finalizedBy("runMicrobot")
     }
 }

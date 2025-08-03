@@ -3,7 +3,6 @@
 import groovy.json.JsonSlurper
 import groovy.json.JsonOutput
 import java.security.MessageDigest
-import java.security.NoSuchAlgorithmException
 
 
 def pluginRoot = file("src/main/java/com/microbot/plugins")
