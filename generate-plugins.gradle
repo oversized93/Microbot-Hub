@@ -42,10 +42,22 @@ tasks.register("generatePluginsJson") {
     doLast {
         def plugins = []
 
-        pluginRoot.eachDir { dir ->
-            def pluginName = dir.name
-            def pluginJsonFile = new File(dir, "plugin.json")
-            def version = pluginVersionFromPluginJson(dir as File)
+        pluginRoot.eachDir { pluginDir ->
+            def pluginName = ""
+
+            def pluginJavaFile = pluginDir.listFiles()?.find { file ->
+                file.name.endsWith("Plugin.java")
+            }
+
+            if (pluginJavaFile) {
+                pluginName = pluginJavaFile.name
+                println "Found plugin class: ${pluginJavaFile.name}"
+            } else {
+                println "No Plugin.java file found in $pluginName"
+            }
+
+            def pluginJsonFile = new File(pluginDir, "plugin.json")
+            def version = pluginVersionFromPluginJson(pluginDir as File)
             def jarFile = new File(jarOutputDir, "${pluginName}-${version}.jar")
 
             if (!pluginJsonFile.exists()) {
