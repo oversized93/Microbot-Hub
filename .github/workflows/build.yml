@@ -48,7 +48,7 @@ jobs:
 
       - name: Copy documentation to docs folder
         run: |
-          cp -r public/* docs/
+          cp -r public/* ./
 
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
