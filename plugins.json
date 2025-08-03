@@ -1,3 +1,22 @@
 [
-    
+    {
+        "id": "ExampleTest",
+        "description": "This is a test",
+        "author": "Mocrosoft",
+        "name": "M. ExampleTest",
+        "version": "1.0.0",
+        "minClientVersion": "1.9.6",
+        "sha256": "612147695eacc270578edc56cdd8c0729768eda9303f86e48bcd2d15a626ba51",
+        "url": "https://nexus.microbot.cloud/repository/microbot-plugins/com/microbot/plugins/exampletest/1.0.0/exampletest-1.0.0.jar"
+    },
+    {
+        "id": "Woodcutting",
+        "description": "All in one woodcutter",
+        "author": "Mocrosoft",
+        "name": "M. Woodcutting",
+        "version": "1.0.0",
+        "minClientVersion": "1.9.6",
+        "sha256": "2ffcf819945ae6028ef5af40e39c694f332cf431c67639b74c99419f05c22602",
+        "url": "https://nexus.microbot.cloud/repository/microbot-plugins/com/microbot/plugins/woodcutting/1.0.0/woodcutting-1.0.0.jar"
+    }
 ]
