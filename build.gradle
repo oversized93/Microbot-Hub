@@ -211,7 +211,7 @@ tasks.register("copyPluginDocs") {
             }
             def imagesDir = new File(pluginDir, "images")
 
-            if (readmeFile.exists()) {
+            if (readmeFile != null && readmeFile.exists()) {
                 // Create plugin docs directory
                 def pluginDocsDir = new File(publicDir, pluginName)
                 pluginDocsDir.mkdirs()
@@ -239,7 +239,7 @@ tasks.register("copyPluginDocs") {
 
 // Update your GitHub Pages deployment to include the docs
 tasks.named("generatePluginsJson") {
-    if (isCI) {
+    if (!isCI) {
         finalizedBy("copyPluginDocs")
     }
 }
