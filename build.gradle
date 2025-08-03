@@ -142,7 +142,7 @@ pluginDirs.each { pluginDir ->
 
     jarTask.configure {
         dependsOn("generatePluginsJson")
-        from("$buildDir/generated/resources/plugins.json") {
+        from("public/docs/plugins.json") {
             into("/")
             rename { "plugins.json" }
         }
