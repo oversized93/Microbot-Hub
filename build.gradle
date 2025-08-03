@@ -108,15 +108,6 @@ pluginDirs.each { dir ->
         configurations = [project.configurations.getByName(pluginConfigName)]
         destinationDirectory.set(layout.buildDirectory.dir("libs"))
 
-        //Disable timestamp preservation
-        preserveFileTimestamps = false
-        reproducibleFileOrder = true
-
-        // Set Unix permissions consistently
-        eachFile { fileCopyDetails ->
-            fileCopyDetails.mode = 0644 // rw-r--r--
-        }
-
         duplicatesStrategy = DuplicatesStrategy.EXCLUDE
         // Exclude module-info.class entirely (you don't need modules for plugins)
         exclude 'module-info.class'
@@ -124,6 +115,16 @@ pluginDirs.each { dir ->
         exclude '**/plugin.json'
         exclude '**/plugins.json'
         outputs.upToDateWhen { false } // Always run
+    }
+
+    tasks.withType(Jar).configureEach {
+        preserveFileTimestamps = false
+        reproducibleFileOrder = true
+
+        // Set Unix permissions consistently
+        eachFile { fileCopyDetails ->
+            fileCopyDetails.mode = 0644 // rw-r--r--
+        }
     }
 
     def copyTask = tasks.register("copy${pluginName}ToMicrobot", Copy) {
