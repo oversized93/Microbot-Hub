@@ -13,8 +13,6 @@ import groovy.json.JsonSlurper
 
 apply from: 'generate-plugins.gradle'
 
-version = '1.0'
-
 tasks.named('shadowJar') {
     enabled = false
 }
@@ -68,8 +66,8 @@ def pluginsProperty = project.findProperty("pluginList")
 def selectedPlugins = pluginsProperty ? pluginsProperty.split(',' as Closure).collect { it.trim() } : []
 
 // Create a sourceSet + ShadowJar per plugin
-pluginDirs.each { dir ->
-    def pluginName = dir.name
+pluginDirs.each { pluginDir ->
+    def pluginName = pluginDir.name
 
     if (selectedPlugins && !selectedPlugins.contains(pluginName)) {
         println "Skipping plugin: $pluginName"
@@ -82,7 +80,7 @@ pluginDirs.each { dir ->
         extendsFrom configurations.pluginShadowClasspath
     }
 
-    def depsFile = new File(dir as File, "dependencies.txt")
+    def depsFile = new File(pluginDir as File, "dependencies.txt")
     if (depsFile.exists()) {
         depsFile.readLines().each { dep ->
             println("dep " + dep.trim())
@@ -92,7 +90,7 @@ pluginDirs.each { dir ->
 
     // Create a sourceset for each plugin
     def ss = sourceSets.create(pluginName) {
-        java.srcDir dir
+        java.srcDir pluginDir
         compileClasspath += sourceSets.main.compileClasspath
         runtimeClasspath += sourceSets.main.runtimeClasspath
     }
@@ -100,7 +98,7 @@ pluginDirs.each { dir ->
     // Create a ShadowJar task for each plugin
     def jarTask = tasks.register("${pluginName}Jar", ShadowJar) {
         archiveBaseName.set(pluginName)
-        archiveVersion.set(pluginVersionFromPluginJson(dir as File))          // => pluginName.jar
+        archiveVersion.set(pluginVersionFromPluginJson(pluginDir as File))          // => pluginName.jar
         archiveClassifier.set('')       // no -all
         from ss.output
         // configurations = [project.configurations.pluginShadowClasspath]
@@ -114,24 +112,14 @@ pluginDirs.each { dir ->
         exclude 'META-INF/versions/**'
         exclude '**/plugin.json'
         exclude '**/plugins.json'
-        outputs.upToDateWhen { false } // Always run
-    }
-
-    tasks.withType(Jar).configureEach {
-        preserveFileTimestamps = false
-        reproducibleFileOrder = true
-
-        // Set Unix permissions consistently
-        eachFile { fileCopyDetails ->
-            fileCopyDetails.mode = 0644 // rw-r--r--
-        }
+        outputs.upToDateWhen { isCI }
     }
 
     def copyTask = tasks.register("copy${pluginName}ToMicrobot", Copy) {
         dependsOn(jarTask)
         from(jarTask.flatMap { it.archiveFile })   // never hardcode build/libs/...
         into("${System.properties['user.home']}/.runelite/microbot-plugins")
-        outputs.upToDateWhen { false } // Always run
+        outputs.upToDateWhen { isCI } // Always run
     }
 
     jarTask.configure {
@@ -148,7 +136,7 @@ pluginDirs.each { dir ->
                 create("${pluginName}Publication", MavenPublication) {
                     groupId = "com.microbot.plugins"
                     artifactId = pluginName.toLowerCase()
-                    version = pluginVersionFromPluginJson(dir as File)
+                    version = pluginVersionFromPluginJson(pluginDir as File)
 
                     artifact(tasks.named("${pluginName}Jar").get().archiveFile) {
                         extension "jar"
@@ -176,6 +164,16 @@ pluginDirs.each { dir ->
             dependsOn(copyTask)
             dependsOn("runMicrobot")
         }
+    }
+}
+
+tasks.withType(Jar).configureEach {
+    preserveFileTimestamps = false
+    reproducibleFileOrder = true
+
+    // Set Unix permissions consistently
+    eachFile { fileCopyDetails ->
+        fileCopyDetails.mode = 0644 // rw-r--r--
     }
 }
 
