@@ -1,8 +1,10 @@
 {
-  "id": "WoodcuttingPlugin",
+  "internalName": "WoodcuttingPlugin",
   "description": "All in one woodcutter",
   "author":"Mocrosoft",
   "name": "M. Woodcutting",
   "version": "1.0.0",
-  "minClientVersion": "1.9.6"
+  "minClientVersion": "1.9.6",
+  "iconUrl": "",
+  "supportUrl": ""
 }
