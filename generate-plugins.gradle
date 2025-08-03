@@ -7,7 +7,7 @@ import java.security.MessageDigest
 
 def pluginRoot = file("src/main/java/com/microbot/plugins")
 def jarOutputDir = file("$buildDir/libs")
-def outputJson = file("$buildDir/generated/resources/plugins.json")
+def outputJson = file("public/docs/plugins.json")
 
 def computeSHA256 = { File file ->
     MessageDigest digest = MessageDigest.getInstance("SHA-256");

@@ -139,18 +139,6 @@ pluginDirs.each { pluginDir ->
     }
 
 
-
-    jarTask.configure {
-        dependsOn("generatePluginsJson")
-        from("public/docs/plugins.json") {
-            into("/")
-            rename { "plugins.json" }
-        }
-        doLast {
-            println "✅ Built plugin JAR: ${archiveFile.get().asFile}"
-        }
-    }
-
     afterEvaluate {
         publishing {
             publications {
@@ -254,9 +242,7 @@ tasks.register("copyPluginDocs") {
 
 // Update your GitHub Pages deployment to include the docs
 tasks.named("generatePluginsJson") {
-    if (!isCI) {
-        finalizedBy("copyPluginDocs")
-    }
+    finalizedBy("copyPluginDocs")
 }
 
 tasks.register("runMicrobot", Exec) {
