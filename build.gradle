@@ -195,3 +195,51 @@ tasks.register("runMicrobot", Exec) {
         commandLine 'java', '-jar', configurations.microbotRuntime.singleFile
     }
 }
+
+tasks.register("copyPluginDocs") {
+    group = "documentation"
+    description = "Copies plugin README.md files and images to the public directory for GitHub Pages"
+
+    doLast {
+        def publicDir = file("public/docs")
+        publicDir.mkdirs()
+
+        pluginDirs.each { pluginDir ->
+            def pluginName = pluginDir.name
+            def readmeFile = pluginDir.listFiles()?.find { file ->
+                file.name.equalsIgnoreCase("readme.md")
+            }
+            def imagesDir = new File(pluginDir, "images")
+
+            if (readmeFile.exists()) {
+                // Create plugin docs directory
+                def pluginDocsDir = new File(publicDir, pluginName)
+                pluginDocsDir.mkdirs()
+
+                // Copy README.md
+                copy {
+                    from readmeFile
+                    into pluginDocsDir
+                }
+
+                println "✅ Copied README.md for plugin: ${pluginName}"
+
+                // Copy images if they exist
+                if (imagesDir.exists() && imagesDir.isDirectory()) {
+                    copy {
+                        from imagesDir
+                        into new File(pluginDocsDir, "images")
+                    }
+                    println "✅ Copied images for plugin: ${pluginName}"
+                }
+            }
+        }
+    }
+}
+
+// Update your GitHub Pages deployment to include the docs
+tasks.named("generatePluginsJson") {
+    if (isCI) {
+        finalizedBy("copyPluginDocs")
+    }
+}
