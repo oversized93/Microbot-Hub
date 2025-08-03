@@ -22,6 +22,13 @@ def computeSHA256 = { File file ->
     return md.digest().encodeHex().toString()
 }
 
+def static pluginVersionFromPluginJson(File pluginDir) {
+    def pluginJson = new File(pluginDir, "plugin.json")
+    if (!pluginJson.exists()) return "0.0.1"
+    def json = new JsonSlurper().parseText(pluginJson.text)
+    return json.version ?: "0.0.1"
+}
+
 tasks.register("generatePluginsJson") {
     group = "build"
     description = "Generates plugins.json by scanning plugin folders and hashing JARs"
@@ -32,7 +39,8 @@ tasks.register("generatePluginsJson") {
         pluginRoot.eachDir { dir ->
             def pluginName = dir.name
             def pluginJsonFile = new File(dir, "plugin.json")
-            def jarFile = new File(jarOutputDir, "${pluginName}.jar")
+            def version = pluginVersionFromPluginJson(dir as File)
+            def jarFile = new File(jarOutputDir, "${pluginName}-${version}.jar")
 
             if (!pluginJsonFile.exists()) {
                 logger.warn("⚠️ No plugin.json found in ${pluginName}")
