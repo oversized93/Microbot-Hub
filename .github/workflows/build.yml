@@ -1,4 +1,3 @@
-
 name: Build and Publish Plugins
 
 on:
@@ -47,8 +46,14 @@ jobs:
           publish_branch: gh-pages
           enable_jekyll: false
 
-      - name: Copy plugins.json and documentation to public folder
+      - name: Copy documentation to docs folder
         run: |
-          mkdir -p public
-          cp build/generated/resources/plugins.json public/
-          ./gradlew copyPluginDocs
+          cp -r public/* docs/
+
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./public
+          publish_branch: gh-pages
+          enable_jekyll: false
