@@ -1,3 +1,4 @@
+package net.runelite.client.plugins.microbot.woodcutting;
 
 import net.runelite.client.plugins.microbot.Microbot;
 import net.runelite.client.ui.FontManager;

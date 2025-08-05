@@ -40,6 +40,9 @@ repositories {
 dependencies {
     compileOnly 'com.microbot:client:1.9.6.1'
     microbotRuntime 'com.microbot:client:1.9.6.1'
+
+    // Add Microbot client dependency for tests
+    testImplementation 'com.microbot:client:1.9.6.1'
 }
 
 application {

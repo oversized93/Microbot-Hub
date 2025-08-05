@@ -1,3 +1,4 @@
+package net.runelite.client.plugins.microbot.whatever;
 
 import com.google.inject.Provides;
 import lombok.extern.slf4j.Slf4j;
@@ -12,27 +13,27 @@ import javax.inject.Inject;
 import java.awt.*;
 
 @PluginDescriptor(
-        name = PluginDescriptor.Default + "Example [SideLoaded]",
+        name = PluginDescriptor.Default + "Whatever [SideLoaded]",
         description = "Microbot example plugin",
         tags = {"example", "microbot"},
         enabledByDefault = false
 )
 @Slf4j
-public class WoodcuttingPlugin extends Plugin {
+public class WhateverTestPlugin extends Plugin {
     @Inject
-    private WoodcuttingConfig config;
+    private WhateverTestConfig config;
     @Provides
-    WoodcuttingConfig provideConfig(ConfigManager configManager) {
-        return configManager.getConfig(WoodcuttingConfig.class);
+    WhateverTestConfig provideConfig(ConfigManager configManager) {
+        return configManager.getConfig(WhateverTestConfig.class);
     }
 
     @Inject
     private OverlayManager overlayManager;
     @Inject
-    private WoodcuttingOverlay exampleOverlay;
+    private WhateverTestOverlay exampleOverlay;
 
     @Inject
-    WoodcuttingScript exampleScript;
+    WhateverTestScript exampleScript;
 
 
     @Override

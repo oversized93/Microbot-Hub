@@ -1,3 +1,4 @@
+package net.runelite.client.plugins.microbot.exampletest;
 
 import com.google.inject.Provides;
 import lombok.extern.slf4j.Slf4j;

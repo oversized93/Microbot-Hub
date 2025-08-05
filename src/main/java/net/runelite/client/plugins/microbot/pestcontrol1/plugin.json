@@ -1,0 +1,10 @@
+{
+  "internalName": "PestControlPlugin",
+  "description": "TMicrobot Pest Control plugin, this supports all the boats.",
+  "author":"Mocrosoft",
+  "name": "M. Pest Control",
+  "version": "2.2",
+  "minClientVersion": "1.9.6",
+  "iconUrl": "https://oldschool.runescape.wiki/images/Pest_Control.png?ed7bb",
+  "supportUrl": "https://github.com/chsami/microbot"
+}

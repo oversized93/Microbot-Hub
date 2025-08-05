@@ -1,14 +1,15 @@
+package net.runelite.client.plugins.microbot.woodcutting;
 
 import net.runelite.client.plugins.microbot.Microbot;
 import net.runelite.client.plugins.microbot.Script;
 
 import java.util.concurrent.TimeUnit;
 
-public class ExampleTestScript extends Script {
+public class WoodcuttingScript extends Script {
 
     public static boolean test = false;
 
-    public boolean run(ExampleTestConfig config) {
+    public boolean run(WoodcuttingConfig config) {
         Microbot.enableAutoRunOn = false;
         mainScheduledFuture = scheduledExecutorService.scheduleWithFixedDelay(() -> {
             try {
