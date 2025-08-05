@@ -5,7 +5,7 @@ import groovy.json.JsonOutput
 import java.security.MessageDigest
 
 
-def pluginRoot = file("src/main/java/com/microbot/plugins")
+def pluginRoot = file("src/main/java/net/runelite/client/plugins/microbot")
 def jarOutputDir = file("$buildDir/libs")
 def outputJson = file("public/docs/plugins.json")
 
@@ -80,7 +80,7 @@ tasks.register("generatePluginsJson") {
                 def pluginVersion = parsed.version
                 def pluginId = parsed.id ?: pluginName  // fallback to folder name
                 def nexusBase = "https://nexus.microbot.cloud/repository/microbot-plugins"
-                parsed["url"] = "${nexusBase}/com/microbot/plugins/${pluginId.toLowerCase()}/${pluginVersion}/${pluginId.toLowerCase()}-${pluginVersion}.jar"
+                parsed["url"] = "${nexusBase}/net/runelite/client/plugins/microbot/${pluginId.toLowerCase()}/${pluginVersion}/${pluginId.toLowerCase()}-${pluginVersion}.jar"
 
                 plugins << parsed
             } catch (e) {
