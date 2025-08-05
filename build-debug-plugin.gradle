@@ -1,0 +1,88 @@
+import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
+
+plugins {
+    id 'java'
+    id 'com.github.johnrengelman.shadow' version '8.1.1'
+}
+
+repositories {
+    mavenLocal()
+    maven {
+        url = 'https://nexus.microbot.cloud/repository/microbot-nightly/'
+    }
+    mavenCentral()
+}
+
+def pluginName = "PestControlPlugin" // Change this to your actual plugin name
+def pluginOutputDir = file("build/classes/java/main")
+
+configurations {
+    microbotClient {
+        transitive = true
+    }
+}
+
+sourceSets {
+    main {
+        java {
+            srcDirs = ['src/main/java']
+        }
+        resources {
+            srcDirs = ['src/main/resources']
+        }
+    }
+}
+
+dependencies {
+    // Existing dependency for the client JAR
+    microbotClient 'com.microbot:client:1.9.6.1'
+
+    // Add implementation dependency to resolve compilation issues
+    implementation 'com.microbot:client:1.9.6.1'
+
+    // Add Lombok dependency
+    compileOnly 'org.projectlombok:lombok:1.18.30'
+    annotationProcessor 'org.projectlombok:lombok:1.18.30'
+}
+
+tasks.register("buildFatDebugJar", ShadowJar) {
+    group = "debug"
+    description = "Builds a fat debug jar with Microbot client + plugin"
+
+    // Include compiled plugin classes
+    from sourceSets.main.output
+
+    // Correctly include the Microbot client configuration
+    configurations = [project.configurations.microbotClient]
+    // Or alternatively:
+    // from(project.configurations.microbotClient)
+
+    manifest {
+        attributes(
+                "Main-Class": "net.runelite.client.RuneLite",
+                "Multi-Release": "true"
+        )
+    }
+
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+
+    exclude 'META-INF/INDEX.LIST'
+    exclude 'META-INF/*.SF'
+    exclude 'META-INF/*.DSA'
+    exclude 'META-INF/*.RSA'
+    exclude '**/module-info.class'
+
+    archiveClassifier.set("debug")
+    archiveFileName.set("microbot-debug-all.jar")
+    destinationDirectory.set(file("${buildDir}/debug-jar"))
+
+    doLast {
+        println "✅ Listing files in final fat jar:"
+        def zipFile = file(archiveFile.get())
+        zipTree(zipFile).visit { fileDetails ->
+            if (!fileDetails.isDirectory() && fileDetails.relativePath.toString().contains("PestControl")) {
+                println "  -> ${fileDetails.relativePath}"
+            }
+        }
+    }
+}
