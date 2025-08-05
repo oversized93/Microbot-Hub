@@ -3,7 +3,7 @@ plugins {
     id 'io.freefair.lombok' version '8.6'
     id 'com.github.johnrengelman.shadow' version '8.1.1'
     id 'maven-publish'
-
+    id 'idea'
 }
 
 def isCI = System.getenv("CI")?.toBoolean() ?: false
@@ -47,6 +47,7 @@ application {
     mainClass = 'net.runelite.client.RuneLite'
 }
 
+
 def static pluginVersionFromPluginJson(File pluginDir) {
     def pluginJson = new File(pluginDir, "plugin.json")
     if (!pluginJson.exists()) return "0.0.1"
@@ -57,7 +58,7 @@ def static pluginVersionFromPluginJson(File pluginDir) {
 
 // Plugin Logic
 
-def pluginsDir = file('src/main/java/com/microbot/plugins')
+def pluginsDir = file('src/main/java/net/runelite/client/plugins/microbot/plugins')
 def pluginDirs = pluginsDir.listFiles()?.findAll { it.isDirectory() } ?: []
 
 println "Detected plugins: " + pluginDirs*.name
@@ -100,16 +101,16 @@ pluginDirs.each { pluginDir ->
     }
 
     // Create a sourceset for each plugin
-    def ss = sourceSets.create(pluginName) {
+    /*def ss = sourceSets.create(pluginName) {
         java.srcDir pluginDir
         compileClasspath += sourceSets.main.compileClasspath
         runtimeClasspath += sourceSets.main.runtimeClasspath
-    }
+    }*/
 
 
     // Create a ShadowJar task for each plugin
     def jarTask = tasks.register("${pluginName}Jar", ShadowJar) {
-        from ss.output
+        from sourceSets.main.output
         archiveFileName.set("${pluginName}-${pluginVersionFromPluginJson(pluginDir)}.jar")
         archiveBaseName.set(pluginName)
         archiveVersion.set(pluginVersionFromPluginJson(pluginDir as File))          // => pluginName.jar
@@ -123,6 +124,11 @@ pluginDirs.each { pluginDir ->
         // Exclude module-info.class entirely (you don't need modules for plugins)
         exclude 'module-info.class'
         exclude 'META-INF/versions/**'
+        exclude 'META-INF/INDEX.LIST'
+        exclude 'META-INF/*.SF'
+        exclude 'META-INF/*.DSA'
+        exclude 'META-INF/*.RSA'
+        exclude '**/module-info.class'
         exclude '**/plugin.json'
         exclude '**/plugins.json'
         outputs.upToDateWhen { false }
@@ -245,17 +251,35 @@ tasks.named("generatePluginsJson") {
     finalizedBy("copyPluginDocs")
 }
 
-tasks.register("runMicrobot", Exec) {
+/*tasks.register("runMicrobot", Exec) {
     if (pluginsProperty) {
         commandLine 'java', '-jar', configurations.microbotRuntime.singleFile, "--plugins=${pluginsProperty}"
     } else {
         commandLine 'java', '-jar', configurations.microbotRuntime.singleFile
     }
-}
+}*/
+
+/*tasks.register('runMicrobot', JavaExec) {
+    group = 'application'
+    description = 'Run Microbot client in debug mode'
+
+    // Runtime classpath includes the client dependency
+    classpath = files(
+            configurations.microbotRuntime,
+            sourceSets.main.output
+    )
+    // The actual main class of the client
+    mainClass.set('net.runelite.client.RuneLite')
+
+    // JDWP options to enable debug mode
+    jvmArgs = [
+            '-agentlib:jdwp=transport=dt_socket,server=y,suspend=y,address=*:5005'
+    ]
+}*/
 
 tasks.named("build") {
     finalizedBy("copyPluginDocs")
     if (!isCI) {
-        finalizedBy("runMicrobot")
+        // finalizedBy("runMicrobot")
     }
 }
