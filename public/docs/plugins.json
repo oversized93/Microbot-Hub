@@ -1,17 +1,5 @@
 [
     {
-        "internalName": "ExampleTestPlugin",
-        "description": "This is a test",
-        "author": "Mocrosoft",
-        "name": "M. ExampleTest",
-        "version": "1.0.0",
-        "minClientVersion": "1.9.6",
-        "iconUrl": "",
-        "supportUrl": "",
-        "sha256": "d3e4346150dbacef8cdf97fb64af9d4214a03eb17cca3e623df99005c8a5d568",
-        "url": "https://nexus.microbot.cloud/repository/microbot-plugins/net/runelite/client/plugins/microbot/exampletestplugin/1.0.0/exampletestplugin-1.0.0.jar"
-    },
-    {
         "internalName": "PestControlPlugin",
         "description": "Microbot Pest Control plugin, this supports all the boats.",
         "author": "Mocrosoft",
@@ -22,17 +10,5 @@
         "supportUrl": "https://github.com/chsami/microbot",
         "sha256": "bc74206c960137160e0613a443b4cacaa562db08743d43e9415553ef50ae9ea5",
         "url": "https://nexus.microbot.cloud/repository/microbot-plugins/net/runelite/client/plugins/microbot/pestcontrolplugin/2.2.0/pestcontrolplugin-2.2.0.jar"
-    },
-    {
-        "internalName": "WoodcuttingPlugin",
-        "description": "All in one woodcutter",
-        "author": "Mocrosoft",
-        "name": "M. Woodcutting",
-        "version": "1.0.0",
-        "minClientVersion": "1.9.6",
-        "iconUrl": "",
-        "supportUrl": "",
-        "sha256": "bc74206c960137160e0613a443b4cacaa562db08743d43e9415553ef50ae9ea5",
-        "url": "https://nexus.microbot.cloud/repository/microbot-plugins/net/runelite/client/plugins/microbot/woodcuttingplugin/1.0.0/woodcuttingplugin-1.0.0.jar"
     }
 ]
