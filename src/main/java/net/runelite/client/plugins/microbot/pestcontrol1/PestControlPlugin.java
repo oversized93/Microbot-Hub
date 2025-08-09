@@ -28,7 +28,7 @@ import static net.runelite.client.plugins.microbot.pestcontrol.PestControlScript
 
 
 @PluginDescriptor(
-        name = PluginDescriptor.Mocrosoft + "Pest Control sideloaded",
+        name = PluginDescriptor.Mocrosoft + "Pest Control Hub",
         description = "Microbot Pest Control plugin, this only supports the combat 100+ boat. Start at the front of the boat",
         tags = {"pest control", "microbot", "minigames"},
         enabledByDefault = false

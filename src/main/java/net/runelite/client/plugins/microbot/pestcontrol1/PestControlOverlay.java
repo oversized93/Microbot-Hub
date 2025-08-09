@@ -13,10 +13,13 @@ import java.awt.*;
 import static net.runelite.client.plugins.microbot.pestcontrol.PestControlScript.portals;
 
 public class PestControlOverlay  extends OverlayPanel {
+    private final PestControlPlugin plugin;
+
     @Inject
     PestControlOverlay(PestControlPlugin plugin)
     {
         super(plugin);
+        this.plugin = plugin;
         setPosition(OverlayPosition.TOP_LEFT);
         setNaughty();
     }
@@ -25,7 +28,7 @@ public class PestControlOverlay  extends OverlayPanel {
         try {
             panelComponent.setPreferredSize(new Dimension(200, 300));
             panelComponent.getChildren().add(TitleComponent.builder()
-                    .text("Micro PestControl V" + PestControlScript.version)
+                    .text("Micro PestControl V")
                     .color(Color.GREEN)
                     .build());
 

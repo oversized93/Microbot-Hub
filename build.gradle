@@ -38,11 +38,11 @@ repositories {
 }
 
 dependencies {
-    compileOnly 'com.microbot:client:1.9.6.1'
-    microbotRuntime 'com.microbot:client:1.9.6.1'
+    compileOnly 'com.microbot:client:+'
+    microbotRuntime 'com.microbot:client:+'
 
     // Add Microbot client dependency for tests
-    testImplementation 'com.microbot:client:1.9.6.1'
+    testImplementation 'com.microbot:client:+'
 }
 
 application {
@@ -61,7 +61,7 @@ def static pluginVersionFromPluginJson(File pluginDir) {
 
 // Plugin Logic
 
-def pluginsDir = file('src/main/java/net/runelite/client/plugins/microbot/plugins')
+def pluginsDir = file('src/main/java/net/runelite/client/plugins/microbot')
 def pluginDirs = pluginsDir.listFiles()?.findAll { it.isDirectory() } ?: []
 
 println "Detected plugins: " + pluginDirs*.name
@@ -254,31 +254,6 @@ tasks.named("generatePluginsJson") {
     finalizedBy("copyPluginDocs")
 }
 
-/*tasks.register("runMicrobot", Exec) {
-    if (pluginsProperty) {
-        commandLine 'java', '-jar', configurations.microbotRuntime.singleFile, "--plugins=${pluginsProperty}"
-    } else {
-        commandLine 'java', '-jar', configurations.microbotRuntime.singleFile
-    }
-}*/
-
-/*tasks.register('runMicrobot', JavaExec) {
-    group = 'application'
-    description = 'Run Microbot client in debug mode'
-
-    // Runtime classpath includes the client dependency
-    classpath = files(
-            configurations.microbotRuntime,
-            sourceSets.main.output
-    )
-    // The actual main class of the client
-    mainClass.set('net.runelite.client.RuneLite')
-
-    // JDWP options to enable debug mode
-    jvmArgs = [
-            '-agentlib:jdwp=transport=dt_socket,server=y,suspend=y,address=*:5005'
-    ]
-}*/
 
 tasks.named("build") {
     finalizedBy("copyPluginDocs")

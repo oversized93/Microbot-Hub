@@ -1,6 +1,8 @@
 package net.runelite.client.plugins.microbot.pestcontrol1;
 
 import com.google.common.collect.ImmutableSet;
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
 import net.runelite.api.NPCComposition;
 import net.runelite.api.NpcID;
 import net.runelite.api.ObjectID;
@@ -34,7 +36,6 @@ import static net.runelite.client.plugins.microbot.util.walker.Rs2Walker.distanc
 import static net.runelite.client.plugins.pestcontrol.Portal.*;
 
 public class PestControlScript extends Script {
-    public static double version = 2.2;
 
     boolean initialise = true;
     boolean walkToCenter = false;
