@@ -8,8 +8,20 @@
         "minClientVersion": "1.9.6",
         "iconUrl": "",
         "supportUrl": "",
-        "sha256": "5ba3872a24522592c877146059784d3021daa5b5b81400abda0a961fa2de1ca5",
+        "sha256": "d3e4346150dbacef8cdf97fb64af9d4214a03eb17cca3e623df99005c8a5d568",
         "url": "https://nexus.microbot.cloud/repository/microbot-plugins/net/runelite/client/plugins/microbot/exampletestplugin/1.0.0/exampletestplugin-1.0.0.jar"
+    },
+    {
+        "internalName": "PestControlPlugin",
+        "description": "Microbot Pest Control plugin, this supports all the boats.",
+        "author": "Mocrosoft",
+        "name": "M. Pest Control",
+        "version": "2.2.0",
+        "minClientVersion": "1.9.6",
+        "iconUrl": "https://oldschool.runescape.wiki/images/Pest_Control.png?ed7bb",
+        "supportUrl": "https://github.com/chsami/microbot",
+        "sha256": "bc74206c960137160e0613a443b4cacaa562db08743d43e9415553ef50ae9ea5",
+        "url": "https://nexus.microbot.cloud/repository/microbot-plugins/net/runelite/client/plugins/microbot/pestcontrolplugin/2.2.0/pestcontrolplugin-2.2.0.jar"
     },
     {
         "internalName": "WoodcuttingPlugin",
@@ -20,7 +32,7 @@
         "minClientVersion": "1.9.6",
         "iconUrl": "",
         "supportUrl": "",
-        "sha256": "fc278389c4fa731ec51ae55a587a6f228d341ddac78ac41d4c39ff4cec98ff28",
+        "sha256": "bc74206c960137160e0613a443b4cacaa562db08743d43e9415553ef50ae9ea5",
         "url": "https://nexus.microbot.cloud/repository/microbot-plugins/net/runelite/client/plugins/microbot/woodcuttingplugin/1.0.0/woodcuttingplugin-1.0.0.jar"
     }
 ]

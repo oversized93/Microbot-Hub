@@ -1,4 +1,4 @@
-package net.runelite.client.plugins.microbot.pestcontrol1;
+package net.runelite.client.plugins.microbot.pestcontrol;
 
 public enum PestControlNpc {
     PORTAL,

@@ -140,19 +140,11 @@ pluginDirs.each { pluginDir ->
 
     }
 
-    def copyTask = tasks.register("copy${pluginName}ToMicrobot", Copy) {
-        dependsOn(jarTask)
-        from(jarTask.flatMap { it.archiveFile })   // never hardcode build/libs/...
-        into("${System.properties['user.home']}/.runelite/microbot-plugins")
-        outputs.upToDateWhen { false } // Always run
-    }
-
-
     afterEvaluate {
         publishing {
             publications {
                 create("${pluginName}Publication", MavenPublication) {
-                    groupId = "com.microbot.plugins"
+                    groupId = "net.runelite.client.plugins.microbot"
                     artifactId = pluginName.toLowerCase()
                     version = pluginVersionFromPluginJson(pluginDir as File)
 
@@ -178,9 +170,6 @@ pluginDirs.each { pluginDir ->
     // Only make build depend on it if you want it to always run
     tasks.named("build") {
         dependsOn(jarTask)
-        if (!isCI) {
-            dependsOn(copyTask)
-        }
     }
 
 
@@ -257,7 +246,11 @@ tasks.named("generatePluginsJson") {
 
 tasks.named("build") {
     finalizedBy("copyPluginDocs")
-    if (!isCI) {
-        // finalizedBy("runMicrobot")
+}
+
+tasks.named("processResources") {
+    from("src/main/java") {
+        include "**/plugin.json"
     }
+    outputs.upToDateWhen { false }
 }
