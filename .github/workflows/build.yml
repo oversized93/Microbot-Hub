@@ -22,7 +22,7 @@ jobs:
         uses: actions/setup-java@v3
         with:
           distribution: 'temurin'
-          java-version: '17' # or 11 depending on your project
+          java-version: '11' # or 11 depending on your project
 
       - name: Grant execute permissions to gradlew
         run: chmod +x gradlew
