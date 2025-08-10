@@ -8,12 +8,12 @@
             "microbot",
             "minigames"
         ],
-        "version": "2.2.2",
+        "version": "2.2.3",
         "minClientVersion": "1.9.6",
         "author": "Mocrosoft",
         "supportUrl": "https://github.com/chsami/microbot",
         "iconUrl": "https://oldschool.runescape.wiki/images/Pest_Control.png?ed7bb",
-        "sha256": "4624ca48371343cdf555eb1fe054a2d12872123d692f98e0a1d18fd172eb2bd9",
-        "url": "https://nexus.microbot.cloud/repository/microbot-plugins/net/runelite/client/plugins/microbot/pestcontrolplugin/2.2.2/pestcontrolplugin-2.2.2.jar"
+        "sha256": "fbd4c2a715b76f3027d2992d91cceaaaa08065160546a933a062d821bcb40853",
+        "url": "https://nexus.microbot.cloud/repository/microbot-plugins/net/runelite/client/plugins/microbot/pestcontrolplugin/2.2.3/pestcontrolplugin-2.2.3.jar"
     }
 ]
