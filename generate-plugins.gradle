@@ -89,6 +89,7 @@ tasks.register("generatePluginsJson") {
                 parsed.minClientVersion =  descriptorInfo.minClientVersion // Set default or make configurable
                 parsed.author = descriptorInfo.author  // Set default or make configurable
                 parsed.supportUrl = "https://github.com/chsami/microbot" // Set default or make configurable
+                parsed.iconUrl = descriptorInfo.iconUrl
                 // Add SHA256
                 parsed.sha256 = computeSHA256(new File(jarOutputDir, "${pluginName}-${descriptorInfo.version}.jar"))
 
