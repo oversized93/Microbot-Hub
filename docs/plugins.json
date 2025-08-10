@@ -12,6 +12,7 @@
         "minClientVersion": "1.9.6",
         "author": "Mocrosoft",
         "supportUrl": "https://github.com/chsami/microbot",
+        "iconUrl": "https://oldschool.runescape.wiki/images/Pest_Control.png?ed7bb",
         "sha256": "d7f0adbbabf9b6d2ce6fb35151f7ddb33002e8f95ace3aef0fe5f00cf50c38eb",
         "url": "https://nexus.microbot.cloud/repository/microbot-plugins/net/runelite/client/plugins/microbot/pestcontrolplugin/2.2.0/pestcontrolplugin-2.2.0.jar"
     }
