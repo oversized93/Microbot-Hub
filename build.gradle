@@ -58,8 +58,6 @@ def static pluginVersionFromPluginJson(File pluginDir) {
     return json.version ?: "0.0.1"
 }
 
-//TODO: where does sha gets calculated in the process
-
 
 // Plugin Logic
 
@@ -105,13 +103,6 @@ pluginDirs.each { pluginDir ->
         }
     }
 
-    // Create a sourceset for each plugin
-    /*def ss = sourceSets.create(pluginName) {
-        java.srcDir pluginDir
-        compileClasspath += sourceSets.main.compileClasspath
-        runtimeClasspath += sourceSets.main.runtimeClasspath
-    }*/
-
 
     // Create a ShadowJar task for each plugin
     def jarTask = tasks.register("${pluginName}Jar", ShadowJar) {
@@ -120,8 +111,6 @@ pluginDirs.each { pluginDir ->
         archiveBaseName.set(pluginName)
         archiveVersion.set(pluginVersionFromPluginJson(pluginDir as File))          // => pluginName.jar
         archiveClassifier.set('')       // no -all
-        // configurations = [project.configurations.pluginShadowClasspath]
-        //noinspection ConfigurationAvoidance
         configurations = [project.configurations.getByName(pluginConfigName)]
         destinationDirectory.set(layout.buildDirectory.dir("libs"))
 
@@ -134,7 +123,6 @@ pluginDirs.each { pluginDir ->
         exclude 'META-INF/*.DSA'
         exclude 'META-INF/*.RSA'
         exclude '**/module-info.class'
-        exclude '**/plugin.json'
         exclude '**/plugins.json'
         outputs.upToDateWhen { false }
 
@@ -248,11 +236,4 @@ tasks.named("generatePluginsJson") {
 
 tasks.named("build") {
     finalizedBy("copyPluginDocs")
-}
-
-tasks.named("processResources") {
-    from("src/main/java") {
-        include "**/plugin.json"
-    }
-    outputs.upToDateWhen { false }
 }
