@@ -1,6 +1,6 @@
 [
     {
-        "internalName": "PestControlPlugin",
+        "internalName": "PestControlPluginHub",
         "description": "Microbot Pest Control plugin, this supports all the boats.",
         "author": "Mocrosoft",
         "name": "M. Pest Control",
@@ -8,7 +8,7 @@
         "minClientVersion": "1.9.6",
         "iconUrl": "https://oldschool.runescape.wiki/images/Pest_Control.png?ed7bb",
         "supportUrl": "https://github.com/chsami/microbot",
-        "sha256": "bc74206c960137160e0613a443b4cacaa562db08743d43e9415553ef50ae9ea5",
+        "sha256": "17c3b23eeacb085f0731e04f8733436b9dbcb9d07aed3ef1367ddfafd56ed853",
         "url": "https://nexus.microbot.cloud/repository/microbot-plugins/net/runelite/client/plugins/microbot/pestcontrolplugin/2.2.0/pestcontrolplugin-2.2.0.jar"
     }
 ]
