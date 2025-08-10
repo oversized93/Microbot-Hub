@@ -6,10 +6,7 @@ plugins {
     id 'idea'
 }
 
-def isCI = System.getenv("CI")?.toBoolean() ?: false
-
 import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
-import groovy.json.JsonSlurper
 
 apply from: 'generate-plugins.gradle'
 
@@ -51,15 +48,16 @@ application {
 }
 
 
-def static pluginVersionFromPluginJson(File pluginDir) {
-    def pluginJson = new File(pluginDir, "plugin.json")
-    if (!pluginJson.exists()) return "0.0.1"
-    def json = new JsonSlurper().parseText(pluginJson.text)
-    return json.version ?: "0.0.1"
-}
-
-
 // Plugin Logic
+
+String pluginVersionFromPluginJson(File pluginDir) {
+    def pluginJavaFile = pluginDir.listFiles()?.find { it.name.endsWith("Plugin.java") }
+    if (pluginJavaFile == null) {
+        throw new GradleException("No *Plugin.java found in: $pluginDir")
+    }
+    def info = ext.getPluginDescriptorInfo(pluginJavaFile) as Map  // ext == project.ext
+    return info.version as String
+}
 
 def pluginsDir = file('src/main/java/net/runelite/client/plugins/microbot')
 def pluginDirs = pluginsDir.listFiles()?.findAll { it.isDirectory() } ?: []
@@ -125,9 +123,6 @@ pluginDirs.each { pluginDir ->
         exclude '**/module-info.class'
         exclude '**/plugins.json'
         outputs.upToDateWhen { false }
-
-        dependsOn("generatePluginsJson")
-
     }
 
     afterEvaluate {
@@ -228,12 +223,8 @@ tasks.register("copyPluginDocs") {
     }
 }
 
-// Update your GitHub Pages deployment to include the docs
-tasks.named("generatePluginsJson") {
-    finalizedBy("copyPluginDocs")
-}
-
 
 tasks.named("build") {
+    finalizedBy("generatePluginsJson")
     finalizedBy("copyPluginDocs")
 }

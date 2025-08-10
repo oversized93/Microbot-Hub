@@ -1,5 +1,6 @@
 package net.runelite.client.plugins.microbot.pestcontrol;
 
+import net.runelite.client.plugins.PluginDescriptor;
 import net.runelite.client.plugins.microbot.Microbot;
 import net.runelite.client.plugins.pestcontrol.Portal;
 import net.runelite.client.ui.overlay.OverlayPanel;
@@ -28,7 +29,7 @@ public class PestControlOverlay  extends OverlayPanel {
         try {
             panelComponent.setPreferredSize(new Dimension(200, 300));
             panelComponent.getChildren().add(TitleComponent.builder()
-                    .text("Micro PestControl V" + plugin.getVersionFromJson())
+                    .text("Micro PestControl V" + plugin.getClass().getAnnotation(PluginDescriptor.class).version())
                     .color(Color.GREEN)
                     .build());
 

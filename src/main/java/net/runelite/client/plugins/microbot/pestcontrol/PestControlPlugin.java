@@ -31,7 +31,12 @@ import static net.runelite.client.plugins.microbot.pestcontrol.PestControlScript
         name = PluginDescriptor.Mocrosoft + "Pest Control Hub",
         description = "Microbot Pest Control plugin, this only supports the combat 100+ boat. Start at the front of the boat",
         tags = {"pest control", "microbot", "minigames"},
-        enabledByDefault = false
+        enabledByDefault = false,
+        author = "Mocrosoft",
+        version = "2.2.0",
+        iconUrl = "https://oldschool.runescape.wiki/images/Pest_Control.png?ed7bb",
+        isExternal = true,
+        minClientVersion = "1.9.6"
 )
 @Slf4j
 public class PestControlPlugin extends Plugin implements SchedulablePlugin {
