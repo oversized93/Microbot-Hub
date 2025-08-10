@@ -2,7 +2,7 @@
     {
         "internalName": "PestControlPlugin",
         "name": "Pest Control",
-        "description": "Microbot Pest Control plugin, this only supports the combat 100+ boat. Start at the front of the boat",
+        "description": "Supports all boats, portals, and shields.",
         "tags": [
             "pest control",
             "microbot",
@@ -13,7 +13,7 @@
         "author": "Mocrosoft",
         "supportUrl": "https://github.com/chsami/microbot",
         "iconUrl": "https://oldschool.runescape.wiki/images/Pest_Control.png?ed7bb",
-        "sha256": "edc20a23c82a739579ba4330a7ab9eb5656afb9474e1ee2e1fbd73fd154f9fff",
+        "sha256": "4624ca48371343cdf555eb1fe054a2d12872123d692f98e0a1d18fd172eb2bd9",
         "url": "https://nexus.microbot.cloud/repository/microbot-plugins/net/runelite/client/plugins/microbot/pestcontrolplugin/2.2.2/pestcontrolplugin-2.2.2.jar"
     }
 ]
