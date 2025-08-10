@@ -1,19 +1,19 @@
 [
     {
         "internalName": "PestControlPlugin",
-        "name": "Pest Control Hub",
+        "name": "Pest Control",
         "description": "Microbot Pest Control plugin, this only supports the combat 100+ boat. Start at the front of the boat",
         "tags": [
             "pest control",
             "microbot",
             "minigames"
         ],
-        "version": "2.2.1",
+        "version": "2.2.2",
         "minClientVersion": "1.9.6",
         "author": "Mocrosoft",
         "supportUrl": "https://github.com/chsami/microbot",
         "iconUrl": "https://oldschool.runescape.wiki/images/Pest_Control.png?ed7bb",
-        "sha256": "68021e5d30f03e59442e55bcb2a57b4876027f67ea3c2650656485f4b202ebf3",
-        "url": "https://nexus.microbot.cloud/repository/microbot-plugins/net/runelite/client/plugins/microbot/pestcontrolplugin/2.2.1/pestcontrolplugin-2.2.1.jar"
+        "sha256": "edc20a23c82a739579ba4330a7ab9eb5656afb9474e1ee2e1fbd73fd154f9fff",
+        "url": "https://nexus.microbot.cloud/repository/microbot-plugins/net/runelite/client/plugins/microbot/pestcontrolplugin/2.2.2/pestcontrolplugin-2.2.2.jar"
     }
 ]
