@@ -1,73 +1,133 @@
-# Microbot-Hub
-Create your Microbot Plugins in the Microbot Hub
+Here is a README you can drop into the repo. It includes a clear welcome, the reason the hub exists, and practical install and usage steps with Gradle and RuneLiteDebug.
 
+---
 
-# 1. Project Setup
+# Microbot Hub
 
-## 1.1 Open gradle
+Welcome to the Microbot Hub.
+
+The hub is the dedicated place for community created plugins and scripts. It exists to keep the main Microbot client focused on core features while giving contributors a simple way to build, test, and share new ideas. This separation keeps the client lean, fast, and stable. The hub can evolve quickly without risking the reliability of the core application.
+
+## What you will find here
+
+1. Community plugins that extend Microbot
+2. A light process to build and test plugins
+3. A simple structure that is easy to maintain
+
+## Requirements
+
+1. Java Development Kit that matches the Microbot client version you use
+2. Gradle installed or the Gradle wrapper from the repository
+3. Git for version control
+
+## Repository layout
+
+Each plugin lives in its own Java package. A typical plugin package can contain the following files and folders:
+
+1. `PestControlPlugin.java` or another class that extends your plugin base
+2. `dependencies.txt` for extra Maven coordinates that your plugin needs
+3. `readme.me` with a short description and usage notes for the plugin
+4. `images` folder for screenshots or icons that you want to display in the hub
+
+Only the files you really use are required. If your plugin has no extra libraries you can omit `dependencies.txt`. If you have no images you can omit the folder.
+
+## Declaring plugin dependencies
+
+If your plugin needs extra libraries, add them to `dependencies.txt`, one line per coordinate in standard Maven format. Example:
+
+```
+com.google.guava:guava:33.2.0-jre
+org.apache.commons:commons-lang3:3.14.0
+```
+
+The build reads this file and adds the coordinates at compile time and packaging time.
+
+# Building the project
+
+## 1. Open the Gradle UI
 
 ![img.png](img.png)
 
-## 2.1 Reload all gradle projects
+## 2. Refresh the gradle projects
 
 ![img_1.png](img_1.png)
 
-You are now ready to execute gradle commands. Gradle allows us to build our plugins and run microbot.
+## 3. Run the gradle build command
 
-# 2. How to run Microbot with a plugin
 
-![img_2.png](img_2.png)
+![img_4.png](img_4.png)
 
-### 2.1 Build & Run a specific plugin(s). Replace `exampletest` with your plugin name.
-```bash
-gradle build -PpluginList=exampletest
+## 4. Run Microbot in RuneLiteDebug To Test Your Plugin
+
+
+![img_3.png](img_3.png)
+
+
+
+The build produces plugin jars in the usual Gradle output folders. If the project applies a shading step, the final jars will be placed in the shadow or libs folder depending on the build script.
+
+## Running a plugin in RuneLiteDebug for test purpose
+
+Use this minimal driver to start a focused debug session. Replace `PestControlPlugin` with your plugin class if needed.
+
+```java
+package net.runelite.client;
+
+import net.runelite.client.plugins.microbot.pestcontrol.PestControlPlugin;
+
+public class Microbot
+{
+    public static void main(String[] args) throws Exception
+    {
+        RuneLiteDebug.pluginsToDebug.add(PestControlPlugin.class);
+        RuneLiteDebug.main(args);
+    }
+}
 ```
-### pluginList parameter accepts a comma seperated list of plugin names. For example, if you have two plugins named `exampletest` and `exampletest2`, you can build them both with:
-```bash
-gradle build -PpluginList=exampletest,exampletest2
+
+Tips for a smooth session
+
+1. Make sure the Java version you use here matches the version used to build the client (Java 11)
+2. Confirm that your plugin class is on the classpath of the debug runner
+3. If you see a class version error, rebuild the plugin with the same Java release as the client
+4.
+## Adding plugin docs and images
+
+1. Create `readme.me` in the plugin package with a short description, setup notes, and known limitations
+2. Place screenshots in an `images` folder next to the plugin source
+3. Use relative links in `readme.me` to display screenshots in the hub or on the site that reads these files
+
+Example snippet in `readme.me`:
+
+```
+# Pest Control
+Automates the Pest Control minigame. Supports portals and spinners, smart prayer swaps, and activity checks.
+
+![Overview](images/overview.png)
 ```
 
-The build command will 
-1. shade jar all the specified plugins and copy them to the .runelite/microbot-plugins folder. 
-2. start the microbot client with the specified plugins.
+## Contributing
 
+1. Create a branch with a clear name
+2. Keep changes focused on a single plugin or a single feature
+3. Run the build and make sure it passes
+4. Open a pull request with a short summary and testing steps
 
-## 3. Build Script Changes
+## Troubleshooting
 
-### 3.1 Changes to build.gradle
+**Class was compiled by a newer or older release**
+Rebuild the plugin with the same Java release used by the client. Example, if the client uses release 17, set your Gradle Java toolchain to 17 and rebuild.
 
-- **Plugin Discovery and Dynamic Tasks:**  
-  The build script now scans the directory `src/main/java/com/microbot/plugins` to detect available plugins automatically.  
-  For each detected plugin, a dedicated source set and a `ShadowJar` task are created. This produces an individual shaded jar for every plugin.
+**Client does not see the plugin**
+Confirm the jar is in the plugins folder the client reads. If you use side loading, confirm the folder path in your launcher settings. Make sure the plugin class name matches the expected pattern.
 
-- **Dependency Management:**  
-  A new configuration is created for each plugin (named with the pattern `[pluginName]ShadowDeps`) to handle additional dependencies listed in an optional `dependencies.txt` file inside each plugin folder.
+**Missing dependency at runtime**
+Place the required coordinate in `dependencies.txt` and rebuild. If the plugin is shaded, ensure the build includes the library inside the final jar.
 
-- **Maven Publishing:**  
-  After evaluating the project, each plugin is configured for publication to the Nexus repository. The publication uses plugin metadata from the plugin's `plugin.json` file and attaches the corresponding jar.  
-  Credentials are set by using project properties, which are passed from environment variables in CI.
+## Design goals
 
-- **Additional Tasks:**  
-  A custom task `runMicrobot` is added. It uses the `microbotRuntime` configuration to run the Microbot client with one or several plugins based on the `pluginList` property passed via command line.
+1. Keep the main client small and focused
+2. Allow rapid iteration in the hub without risk to stability
+3. Make plugin setup and testing as simple as possible
 
-### 3.2 Changes to generate-plugins.gradle
-
-- **Automated Plugin JSON Generation:**  
-  A new task `generatePluginsJson` has been introduced into the build process. It scans each plugin folder to generate a consolidated `plugins.json`.  
-  The generated JSON file includes additional fields:
-    - `sha256`: The SHA-256 checksum of the built jar.
-    - `url`: A URL constructed to point to the plugin artifact on Nexus.
-
-- **Resource Configuration:**  
-  The `processResources` task now depends on `generatePluginsJson` to ensure the JSON file is always up to date before packaging.
-
-- **Plugin Artifact Exclusions:**  
-  Raw `plugin.json` files inside plugin directories are excluded from the main resource set to prevent accidental inclusion in the jar.
-
-This update simplifies plugin management by automating jar creation, dependency resolution, and publishing, thus streamlining the process of integrating new plugins into the Microbot Hub.
-
-
-the file listing all the plugins is generated automatically by the `generate-plugins.gradle` script and deployed to
-
-https://chsami.github.io/Microbot-Hub/plugins.json
-
+---
