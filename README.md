@@ -1,4 +1,3 @@
-Here is a README you can drop into the repo. It includes a clear welcome, the reason the hub exists, and practical install and usage steps with Gradle and RuneLiteDebug.
 
 ---
 
