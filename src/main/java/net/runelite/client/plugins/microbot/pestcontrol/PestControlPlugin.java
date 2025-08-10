@@ -33,7 +33,7 @@ import static net.runelite.client.plugins.microbot.pestcontrol.PestControlScript
         tags = {"pest control", "microbot", "minigames"},
         enabledByDefault = false,
         author = "Mocrosoft",
-        version = "2.2.2",
+        version = "2.2.3",
         iconUrl = "https://oldschool.runescape.wiki/images/Pest_Control.png?ed7bb",
         isExternal = true,
         minClientVersion = "1.9.6"
