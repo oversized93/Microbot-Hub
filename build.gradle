@@ -58,6 +58,8 @@ def static pluginVersionFromPluginJson(File pluginDir) {
     return json.version ?: "0.0.1"
 }
 
+//TODO: where does sha gets calculated in the process
+
 
 // Plugin Logic
 

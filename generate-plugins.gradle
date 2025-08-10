@@ -94,11 +94,6 @@ tasks.register("generatePluginsJson") {
     }
 }
 
-// Exclude raw plugin.json files
-sourceSets.main.resources {
-    exclude '**/plugin.json'
-}
-
 tasks.named("processResources") {
     dependsOn("generatePluginsJson")
 }
