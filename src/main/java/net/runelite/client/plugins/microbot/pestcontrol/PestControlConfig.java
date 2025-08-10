@@ -2,21 +2,13 @@ package net.runelite.client.plugins.microbot.pestcontrol;
 
 import net.runelite.client.config.Config;
 import net.runelite.client.config.ConfigGroup;
+import net.runelite.client.config.ConfigInformation;
 import net.runelite.client.config.ConfigItem;
 import net.runelite.client.plugins.microbot.inventorysetups.InventorySetup;
 
 @ConfigGroup("pestcontrol")
+@ConfigInformation("Start near a boat of your combat level")
 public interface PestControlConfig extends Config {
-    @ConfigItem(
-            keyName = "guide",
-            name = "How to use",
-            description = "How to use this plugin",
-            position = 1
-    )
-    default String GUIDE() {
-        return "Start near a boat of your combat level";
-    }
-
     @ConfigItem(
             keyName = "NPC Priority 1",
             name = "NPC Priority 1",

@@ -41,9 +41,9 @@ public class PestControlScript extends Script {
     private final PestControlPlugin plugin;
 
     @Inject
-    public PestControlScript(PestControlPlugin plugin, PestControlPlugin config) {
+    public PestControlScript(PestControlPlugin plugin, PestControlConfig config) {
         this.plugin = plugin;
-        //this.config = config;
+        this.config = config;
     }
 
 
@@ -78,7 +78,6 @@ public class PestControlScript extends Script {
         this.config = config;
         mainScheduledFuture = scheduledExecutorService.scheduleWithFixedDelay(() -> {
             try {
-                Microbot.log("Running Pest Control Script");
                 if (!Microbot.isLoggedIn()) return;
                 if (!super.run()) return;
 
@@ -98,29 +97,8 @@ public class PestControlScript extends Script {
                         sleepUntil(() -> Rs2Player.getWorld() == config.world(), 7000);
                     }
                     if (Rs2Player.getWorldLocation().getRegionID() == 10537 && Rs2Player.getWorld() == config.world()) {
-                        if (!Rs2Bank.isOpen()) {
-                            Microbot.log("Opening bank");
-                            Rs2Bank.openBank();
-                            sleepUntil(Rs2Bank::isOpen, 3000);
-                        }
-                        var inventorySetup = new Rs2InventorySetup(config.inventorySetup(), mainScheduledFuture);
-                        Microbot.log("Starting Inv Setup");
-                        try {
-                            if (!inventorySetup.doesInventoryMatch() || !inventorySetup.doesEquipmentMatch()) {
-                                if (!inventorySetup.loadEquipment() || !inventorySetup.loadInventory()) {
-                                    plugin.reportFinished("Failed to load inventory setup", false);
-                                    return;
-                                }
-                            } else {
-                                Microbot.log("Inv Setup Finished");
-                                Rs2Bank.closeBank();
-                                sleepUntil(() -> !Rs2Bank.isOpen(), 2000);
-                                initialise = false;
-                            }
 
-                        } catch (NullPointerException e) {
-                            throw new RuntimeException("Void thinks you should relect the Inventory setup again");
-                        }
+                        handleInventorySetup();
 
 
                     } else {
@@ -222,6 +200,33 @@ public class PestControlScript extends Script {
             }
         }, 0, 300, TimeUnit.MILLISECONDS);
         return true;
+    }
+
+    /**
+     * Handles the inventory setup based on the provided configuration.
+     */
+    private boolean handleInventorySetup() {
+
+        if (config.inventorySetup() == null) {
+            return false;
+        }
+
+        Microbot.log("Starting Inv Setup");
+        var inventorySetup = new Rs2InventorySetup(config.inventorySetup(), mainScheduledFuture);
+
+        if (inventorySetup.doesInventoryMatch() && inventorySetup.doesEquipmentMatch()) {
+            return true;
+        }
+
+        if (!inventorySetup.loadEquipment() || !inventorySetup.loadInventory()) {
+            plugin.reportFinished("Failed to load inventory setup", false);
+            return false;
+        }
+
+        Microbot.log("Inv Setup Finished");
+        Rs2Bank.closeBank();
+        sleepUntil(() -> !Rs2Bank.isOpen(), 2000);
+        return false;
     }
 
 
