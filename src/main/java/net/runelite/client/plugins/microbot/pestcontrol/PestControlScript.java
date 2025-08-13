@@ -98,8 +98,7 @@ public class PestControlScript extends Script {
                     }
                     if (Rs2Player.getWorldLocation().getRegionID() == 10537 && Rs2Player.getWorld() == config.world()) {
 
-                        handleInventorySetup();
-
+                        initialise = handleInventorySetup();
 
                     } else {
                         Microbot.log("Traveling to Pest Island");
