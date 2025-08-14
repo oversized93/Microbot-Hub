@@ -89,7 +89,11 @@ Tips for a smooth session
 1. Make sure the Java version you use here matches the version used to build the client (Java 11)
 2. Confirm that your plugin class is on the classpath of the debug runner
 3. If you see a class version error, rebuild the plugin with the same Java release as the client
-4.
+
+## Refresh Plugin Dependencies To Use The Latest Version of The Microbot Client
+
+![img_5.png](img_5.png)
+
 ## Adding plugin docs and images
 
 1. Create `readme.me` in the plugin package with a short description, setup notes, and known limitations
