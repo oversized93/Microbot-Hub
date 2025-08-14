@@ -25,7 +25,7 @@ Each plugin lives in its own Java package. A typical plugin package can contain 
 
 1. `PestControlPlugin.java` or another class that extends your plugin base
 2. `dependencies.txt` for extra Maven coordinates that your plugin needs
-3. `readme.me` with a short description and usage notes for the plugin
+3. `README.md` with a short description and usage notes for the plugin
 4. `images` folder for screenshots or icons that you want to display in the hub
 
 Only the files you really use are required. If your plugin has no extra libraries you can omit `dependencies.txt`. If you have no images you can omit the folder.
@@ -89,14 +89,18 @@ Tips for a smooth session
 1. Make sure the Java version you use here matches the version used to build the client (Java 11)
 2. Confirm that your plugin class is on the classpath of the debug runner
 3. If you see a class version error, rebuild the plugin with the same Java release as the client
-4.
+
+## Refresh Plugin Dependencies To Use The Latest Version of The Microbot Client
+
+![img_5.png](img_5.png)
+
 ## Adding plugin docs and images
 
-1. Create `readme.me` in the plugin package with a short description, setup notes, and known limitations
+1. Create `README.md` in the plugin package with a short description, setup notes, and known limitations
 2. Place screenshots in an `images` folder next to the plugin source
-3. Use relative links in `readme.me` to display screenshots in the hub or on the site that reads these files
+3. Use relative links in `README.md` to display screenshots in the hub or on the site that reads these files
 
-Example snippet in `readme.me`:
+Example snippet in `README.md`:
 
 ```
 # Pest Control
