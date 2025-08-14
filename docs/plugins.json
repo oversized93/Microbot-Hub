@@ -15,5 +15,23 @@
         "iconUrl": "https://oldschool.runescape.wiki/images/Pest_Control.png?ed7bb",
         "sha256": "499060f41b5429a4ff1081e5fe9829a7192cfa928eeeb4d708f6f982c435d159",
         "url": "https://nexus.microbot.cloud/repository/microbot-plugins/net/runelite/client/plugins/microbot/pestcontrolplugin/2.2.4/pestcontrolplugin-2.2.4.jar"
+    },
+    {
+        "internalName": "AnonymousPlugin",
+        "name": "Anonymous Mode",
+        "description": "Hide your in-game identity.",
+        "tags": [
+            "chat",
+            "mask",
+            "hide",
+            "anonymous"
+        ],
+        "version": "1.0.0",
+        "minClientVersion": "1.9.6",
+        "author": "Bolado",
+        "supportUrl": "https://github.com/chsami/microbot",
+        "iconUrl": "https://oldschool.runescape.wiki/images/Rogue_mask_chathead.png?0b359",
+        "sha256": "f7299b57956e35a02fb8ac5cc4ec8cd2fac22dde1937ea2faad8ed7da145d41d",
+        "url": "https://nexus.microbot.cloud/repository/microbot-plugins/net/runelite/client/plugins/microbot/anonymousplugin/1.0.0/anonymousplugin-1.0.0.jar"
     }
 ]
