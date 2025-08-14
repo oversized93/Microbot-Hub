@@ -36,7 +36,7 @@ jobs:
       - name: Create/Update GitHub Release with JARs
         uses: ncipollo/release-action@v1
         with:
-          tag: latest
+          tag: latest-release
           name: Latest build
           body: "Commit: ${{ github.sha }}"
           allowUpdates: true
