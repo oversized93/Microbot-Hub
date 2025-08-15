@@ -1,2 +1,5 @@
-name: ""
-title: null
+remote_theme: pages-themes/minimal
+plugins:
+  - jekyll-remote-theme
+include:
+  - assets/css/custom.css
