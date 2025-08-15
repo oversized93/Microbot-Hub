@@ -26,3 +26,8 @@ It explains:
 - Troubleshooting tips -> fixing Java version mismatches, missing plugins, and dependency issues.
 
 - Design goals -> maintain a lean main client, allow quick iteration, and keep setup simple.
+
+
+## Video Explaining everything
+
+https://www.youtube.com/watch?v=NeCcM6-lfvg
