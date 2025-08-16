@@ -90,7 +90,8 @@ ext {
             'META-INF/*.RSA',
             '**/module-info.class',
             '**/plugins.json',
-            '**/docs/**'
+            '**/docs/**',
+            '**/dependencies.txt'
         ]
     }
 
@@ -207,6 +208,14 @@ ext {
             destinationDirectory.set(layout.buildDirectory.dir("libs"))
 
             duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+
+            // Centralized reproducible build settings
+            preserveFileTimestamps = false
+            reproducibleFileOrder = true
+
+            eachFile { fileCopyDetails ->
+                fileCopyDetails.mode = 0644 // rw-r--r--
+            }
 
             getCommonJarExclusions().each { pattern ->
                 exclude pattern
