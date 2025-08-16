@@ -9,7 +9,6 @@ import net.runelite.client.eventbus.Subscribe;
 import net.runelite.client.plugins.Plugin;
 import net.runelite.client.plugins.PluginDescriptor;
 import net.runelite.client.plugins.microbot.Microbot;
-import net.runelite.client.plugins.microbot.PluginConstants;
 import net.runelite.client.plugins.microbot.pluginscheduler.api.SchedulablePlugin;
 import net.runelite.client.plugins.microbot.pluginscheduler.condition.logical.AndCondition;
 import net.runelite.client.plugins.microbot.pluginscheduler.condition.logical.LockCondition;
@@ -27,21 +26,20 @@ import java.util.regex.Pattern;
 
 import static net.runelite.client.plugins.microbot.pestcontrol.PestControlScript.portals;
 
+
 @PluginDescriptor(
-        name = PluginConstants.MOCROSOFT + "Pest Control",
+        name = PluginDescriptor.Mocrosoft + "Pest Control",
         description = "Supports all boats, portals, and shields.",
         tags = {"pest control", "microbot", "minigames"},
+        enabledByDefault = false,
         author = "Mocrosoft",
-        version = PestControlPlugin.version,
-		minClientVersion = "1.9.6",
+        version = "2.2.4",
         iconUrl = "https://oldschool.runescape.wiki/images/Pest_Control.png?ed7bb",
-		enabledByDefault = PluginConstants.DEFAULT_ENABLED,
-        isExternal = PluginConstants.IS_EXTERNAL
+        isExternal = true,
+        minClientVersion = "1.9.6"
 )
 @Slf4j
 public class PestControlPlugin extends Plugin implements SchedulablePlugin {
-
-	static final String version = "2.2.5";
 
     @Inject
     PestControlScript pestControlScript;

@@ -12,25 +12,21 @@ import net.runelite.client.plugins.PluginDescriptor;
 import net.runelite.client.plugins.microbot.Microbot;
 
 import javax.inject.Inject;
-import net.runelite.client.plugins.microbot.PluginConstants;
 
 @PluginDescriptor(
-	name = PluginConstants.BOLADO + "Anonymous Mode",
+	name = PluginDescriptor.Bolado + "Anonymous Mode",
 	author = "Bolado",
-	version = AnonymousPlugin.version,
-	minClientVersion = "1.9.6",
+	version = "1.0.0",
 	description = "Hide your in-game identity.",
 	tags = {"chat", "mask", "hide", "anonymous"},
 	iconUrl = "https://oldschool.runescape.wiki/images/Rogue_mask_chathead.png?0b359",
-	enabledByDefault = PluginConstants.DEFAULT_ENABLED,
-	isExternal = PluginConstants.IS_EXTERNAL
+	enabledByDefault = false,
+	isExternal = true,
+	minClientVersion = "1.9.6"
 )
 
 @Slf4j
 public class AnonymousPlugin extends Plugin {
-
-	static final String version = "1.0.1";
-
 	@Inject
 	private Client client;
 
