@@ -21,6 +21,12 @@ java {
     }
 }
 
+idea {
+    module {
+        downloadSources = false
+    }
+}
+
 tasks.withType(JavaCompile).configureEach {
     options.encoding = 'UTF-8'
     options.release = project.ext.TARGET_JDK_VERSION
@@ -44,6 +50,19 @@ configurations {
     pluginShadowClasspath {
         extendsFrom runtimeClasspath
         exclude group: 'net.runelite', module: 'microbot'
+    }
+
+    // Disable source downloads for all configurations
+    configureEach {
+        resolutionStrategy {
+            eachDependency { details ->
+                if (details.target.group == 'com.microbot' && details.target.name == 'client') {
+                    details.artifactSelection {
+                        selectArtifact(DependencyArtifact.DEFAULT_TYPE, null, null)
+                    }
+                }
+            }
+        }
     }
 }
 
@@ -98,6 +117,16 @@ String pluginVersionFromPluginJson(File pluginDir) {
 
 // Discover and filter plugins
 afterEvaluate {
+    def microbotConfig = configurations.microbotRuntime.resolvedConfiguration
+    def microbotDependency = microbotConfig.firstLevelModuleDependencies
+            .find { it.moduleGroup == 'com.microbot' && it.moduleName == 'client' }
+
+    if (microbotDependency) {
+        logger.lifecycle("🤖 Microbot Client Version: ${microbotDependency.moduleVersion}")
+    } else {
+        logger.warn("⚠️  Could not determine microbot client version")
+    }
+
     def pluginsDir = file(project.ext.getPluginsSourcePath())
     def allPlugins = project.ext.discoverPlugins(pluginsDir)
     def pluginsProperty = project.findProperty("pluginList")
@@ -222,9 +251,11 @@ tasks.register("copyPluginDocs") {
     }
 }
 
+// Validating JDK version when generating plugins.json is important to ensure consistent hashing :(
 tasks.register("generatePluginsJson") {
     group = "build"
     description = "Generates plugins.json by scanning plugin folders and hashing JARs"
+    dependsOn 'validateJdkVersion'
 
     doLast {
         def pluginRoot = file(project.ext.getPluginsSourcePath())
@@ -261,8 +292,4 @@ tasks.register('validateJdkVersion') {
             logger.lifecycle("✅ JDK version validated: ${currentJdkVersion}")
         }
     }
-}
-
-tasks.withType(JavaCompile).configureEach {
-    dependsOn 'validateJdkVersion'
 }
