@@ -21,6 +21,7 @@ import net.runelite.client.plugins.microbot.PluginConstants;
 	minClientVersion = "1.9.6",
 	description = "Hide your in-game identity.",
 	tags = {"chat", "mask", "hide", "anonymous"},
+	cardUrl = "https://chsami.github.io/Microbot-Hub/AnonymousPlugin/assets/card.png",
 	iconUrl = "https://chsami.github.io/Microbot-Hub/AnonymousPlugin/assets/icon.png",
 	enabledByDefault = PluginConstants.DEFAULT_ENABLED,
 	isExternal = PluginConstants.IS_EXTERNAL
@@ -29,7 +30,7 @@ import net.runelite.client.plugins.microbot.PluginConstants;
 @Slf4j
 public class AnonymousPlugin extends Plugin {
 
-	static final String version = "1.0.2";
+	static final String version = "1.0.3";
 
 	@Inject
 	private Client client;
