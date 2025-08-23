@@ -54,7 +54,7 @@ The plugin descriptor is the most important portion of your plugin class. This a
     name = PluginConstants.DEFAULT_PREFIX + "YourPluginName", // Field to define the plugin name (required)
     description = "Brief description of what your plugin does", // A brief description of the plugin (optional, default is '')
     tags = {"tag1", "tag2", "microbot"}, // Tags to categorize the plugin (optional, default is '')
-    author = "Your Name", // Author of the plugin (optional, default is "Unknown Author")
+    authors = { "Your Name" }, // Author(s) of the plugin (optional, default is "Unknown Author")
     version = YourPlugin.version, // Version of the plugin (required)
     minClientVersion = "1.9.8", // Minimum client version required to run the plugin (required)
     iconUrl = "https://example.com/icon.png", // URL to plugin icon shown in client (optional)
