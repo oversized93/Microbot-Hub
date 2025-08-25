@@ -23,10 +23,6 @@ public final class PluginConstants
 	public static final String Cranny = "<html>[<font color=#00B4D8>🐬</font>] ";
 	public static final String BGA = "<html>[<font color=#FF6B35>bga</font>] ";
 
-
-
-
-
     public static final boolean DEFAULT_ENABLED = false;
     public static final boolean IS_EXTERNAL = true;
 }
