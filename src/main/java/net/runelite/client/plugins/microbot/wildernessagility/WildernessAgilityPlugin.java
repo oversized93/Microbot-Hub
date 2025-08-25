@@ -14,7 +14,7 @@ import net.runelite.client.util.Text;
 import net.runelite.client.eventbus.Subscribe;
 
 @PluginDescriptor(
-    name = PluginConstants.Cranny + "Wilderness Agility",
+    name = PluginConstants.CRANNY + "Wilderness Agility",
     description = "Automated wilderness agility training with banking and ticket collection",
     version = WildernessAgilityPlugin.version,
     minClientVersion = "1.9.8",
