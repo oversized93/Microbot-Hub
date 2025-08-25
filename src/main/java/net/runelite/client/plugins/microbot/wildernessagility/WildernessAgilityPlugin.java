@@ -14,15 +14,12 @@ import net.runelite.client.util.Text;
 import net.runelite.client.eventbus.Subscribe;
 
 @PluginDescriptor(
-    name = PluginConstants.CRANNY + "Wilderness Agility",
     description = "Automated wilderness agility training with banking and ticket collection",
     version = WildernessAgilityPlugin.version,
     minClientVersion = "1.9.8",
     tags = {"agility", "skilling", "solo", "mass", "MoneyMaking"},
     enabledByDefault = PluginConstants.DEFAULT_ENABLED,
     isExternal = PluginConstants.IS_EXTERNAL,
-    iconUrl = "https://chsami.github.io/Microbot-Hub/WildernessAgilityPlugin/assets/Icon.png",
-    cardUrl = "httpa://chsami.github.io/Microbot-Hub/WildernessAgilityPlugin/assets/Card.png"
 )
 public class WildernessAgilityPlugin extends Plugin {
 
