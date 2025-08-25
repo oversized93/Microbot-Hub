@@ -123,6 +123,5 @@ Everything else is flexible depending on your personal preferences or available 
 
 Submit your best lap, best individual bank haul, and squirrel pulls on the discord to get added!
 
-![Leaderboard](assets/Leaderboard.png)
 
 ![Ending](assets/Ending.png)
