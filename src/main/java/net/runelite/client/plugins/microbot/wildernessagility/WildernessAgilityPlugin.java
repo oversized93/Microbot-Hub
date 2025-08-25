@@ -21,8 +21,8 @@ import net.runelite.client.eventbus.Subscribe;
     tags = {"agility", "skilling", "solo", "mass", "MoneyMaking"},
     enabledByDefault = PluginConstants.DEFAULT_ENABLED,
     isExternal = PluginConstants.IS_EXTERNAL,
-    iconUrl = "https://oldschool.runescape.wiki/w/Agility_dispenser#/media/File:Agility_dispenser.png",
-    cardUrl = "https://oldschool.runescape.wiki/w/Wilderness_Agility_Course#/media/File:Wilderness_Agility_Course.png"
+    iconUrl = "https://chsami.github.io/Microbot-Hub/WildernessAgilityPlugin/assets/icon.png",
+    cardUrl = "httpa://chsami.github.io/Microbot-Hub/WildernessAgilityPlugin/assets/icon.png"
 )
 public class WildernessAgilityPlugin extends Plugin {
 
