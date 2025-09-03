@@ -30,5 +30,5 @@ public final class PluginConstants
     public static final String SEE1DUCK = "<html>[<font color=#ffff1a>\ud83e\udd86</font>] ";
 
     public static final boolean DEFAULT_ENABLED = false;
-    public static final boolean IS_EXTERNAL = true;
+    public static final boolean IS_EXTERNAL = true; //test
 }
