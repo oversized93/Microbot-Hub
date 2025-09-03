@@ -24,5 +24,5 @@ public final class PluginConstants
 	public static final String BGA = "<html>[<font color=#FF6B35>bga</font>] ";
 
     public static final boolean DEFAULT_ENABLED = false;
-    public static final boolean IS_EXTERNAL = true;
+    public static final boolean IS_EXTERNAL = true; //test
 }
