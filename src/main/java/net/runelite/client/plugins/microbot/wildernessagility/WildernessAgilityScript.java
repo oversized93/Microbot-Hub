@@ -53,7 +53,7 @@ public final class WildernessAgilityScript extends Script {
         new WildernessAgilityObstacleModel(23556, false),
         new WildernessAgilityObstacleModel(23542, true),
         new WildernessAgilityObstacleModel(23640, false)
-    ); //hi
+    );
 
     // --- Dispenser Tracking ---
     private int dispenserLoots = 0;
