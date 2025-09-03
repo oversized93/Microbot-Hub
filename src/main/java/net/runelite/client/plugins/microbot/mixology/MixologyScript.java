@@ -26,8 +26,7 @@ import java.util.*;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
-import static net.runelite.client.plugins.microbot.mixology.AlchemyObject.MIXING_VESSEL;
-
+import static net.runelite.client.plugins.microbot.mixology.enums.AlchemyObject.MIXING_VESSEL;
 
 public class MixologyScript extends Script {
     private static final Integer DIGWEED = ItemID.MM_LAB_SPECIAL_HERB;
